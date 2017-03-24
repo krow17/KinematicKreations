@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Color : MonoBehaviour 
 {
-	enum color {Blue,Green,Yellow,Red};
+	public enum color {Blue,Green,Yellow,Red};
 }
 
 public class LShape : MonoBehaviour {
