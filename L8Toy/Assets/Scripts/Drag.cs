@@ -3,28 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Drag : MonoBehaviour {
-	private Vector3 screenPoint;
-	private Vector3 offset;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-	}
+
+	public Vector3 gameObjectSreenPoint;
+	public Vector3 mousePreviousLocation;
+	public Vector3 mouseCurLocation;
+
 	void OnMouseDown()
 	{
-		screenPoint = Camera.main.WorldToScreenPoint(transform.position);
-		offset =  transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,screenPoint.z));
+		//This grabs the position of the object in the world and turns it into the position on the screen
+		gameObjectSreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+		//Sets the mouse pointers vector3
+		mousePreviousLocation = new Vector3(Input.mousePosition.x, Input.mousePosition.y, gameObjectSreenPoint.z);
 	}
+
+	public Vector3 force;
+	public Vector3 objectCurrentPosition;
+	public Vector3 objectTargetPosition;
+	public float topSpeed = 20;
 
 	void OnMouseDrag()
 	{
-		GetComponent<Rigidbody> ().constraints = RigidbodyConstraints.None;
-		Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-		Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-		transform.position = curPosition;
+		mouseCurLocation = new Vector3(Input.mousePosition.x, Input.mousePosition.y, gameObjectSreenPoint.z);
+		force = new Vector3(mouseCurLocation.x - mousePreviousLocation.x, mouseCurLocation.z - mousePreviousLocation.z, mouseCurLocation.y - mousePreviousLocation.y);
+		mousePreviousLocation = mouseCurLocation;
+		GetComponent<Rigidbody>().AddForce (force);
+	}
+
+	public void OnMouseUp()
+	{
+
+		//Makes sure there isn't a ludicrous speed
+		//if (GetComponent<Rigidbody>().velocity.magnitude > topSpeed)
+		//	force = GetComponent<Rigidbody>().velocity.normalized * topSpeed;
+
+	}
+
+	public void FixedUpdate()
+	{
+		if (!Input.GetMouseButton (0)) {
+			GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+		}
+
+	}// Use this for initialization
+	void Start () {
+
+	}
+
+	// Update is called once per frame
+	void Update () {
+
 	}
 }
