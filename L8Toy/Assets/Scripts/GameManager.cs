@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+
     public static GameManager instance = null;
-    public static Config con;
+    public Config config;
+
+	public bool playMode = false;
+
+	public MainFunctions mfuncs;
+
 	void Awake () {
 		
         if (instance == null)
