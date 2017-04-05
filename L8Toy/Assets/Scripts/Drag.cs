@@ -19,14 +19,14 @@ public class Drag : MonoBehaviour {
 	public Vector3 force;
 	public Vector3 objectCurrentPosition;
 	public Vector3 objectTargetPosition;
-	public float topSpeed = 20;
+	public float topSpeed = GameManager.instance.parameters.maxDragSpeed;
 
 	void OnMouseDrag()
 	{
 		mouseCurLocation = new Vector3(Input.mousePosition.x, Input.mousePosition.y, gameObjectSreenPoint.z);
 		force = new Vector3(mouseCurLocation.x - mousePreviousLocation.x, mouseCurLocation.z - mousePreviousLocation.z, mouseCurLocation.y - mousePreviousLocation.y);
 		mousePreviousLocation = mouseCurLocation;
-		GetComponent<Rigidbody>().AddForce (force);
+		GetComponent<Rigidbody>().AddForce (force * GameManager.instance.parameters.forceMultiplier);
 	}
 
 	public void OnMouseUp()

@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
     public Config config;
 
+	public Parameters parameters;
+
 	public bool playMode = false;
 
 	public MainFunctions mfuncs;
