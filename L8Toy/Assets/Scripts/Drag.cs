@@ -19,7 +19,7 @@ public class Drag : MonoBehaviour {
 	public Vector3 force;
 	public Vector3 objectCurrentPosition;
 	public Vector3 objectTargetPosition;
-	public float topSpeed = GameManager.instance.parameters.maxDragSpeed;
+	public float topSpeed;
 
 	void OnMouseDrag()
 	{
@@ -46,6 +46,8 @@ public class Drag : MonoBehaviour {
 
 	}// Use this for initialization
 	void Start () {
+
+		topSpeed = GameManager.instance.parameters.maxDragSpeed;
 
 	}
 

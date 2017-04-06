@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Color : MonoBehaviour 
-{
-	public enum color {Blue,Green,Yellow,Red};
-}
-
 public class LShape : MonoBehaviour {
+
+	public enum Color {Blue,Green,Yellow,Red};
 
 	int layer;
 	Color color;
+	bool selected;
 
 	void Start () {
+		layer = 0;
+		color = Color.Blue; //WE SHOULD RANDOMIZE;
+		selected = true;
 		transform.position = new Vector3 (0, 0, 0);
-		AddPiece();
 		AddPiece();
 		CheckLocation();
 	}
