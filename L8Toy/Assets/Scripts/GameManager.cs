@@ -5,6 +5,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 
+	public Material blueMat;
+	public Material whiteMat;
+	public Material yellowMat;
+	public Material redMat;
+
     public static GameManager instance = null;
     public Config config;
 

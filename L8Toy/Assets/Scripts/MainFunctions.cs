@@ -18,10 +18,13 @@ public class MainFunctions : MonoBehaviour {
 	public void addPiece()
 	{
 		Debug.Log ("clicked");
-		if (GameManager.instance.config.numberOfPieces < 8) {
-			Instantiate (LPiece, Vector3.zero, Quaternion.identity);
-			GameManager.instance.config.numberOfPieces++;
-		} else {
+		if (GameManager.instance.config.numberOfPieces < 8)
+		{
+			GameObject tempL = Instantiate (LPiece, Vector3.zero, Quaternion.identity);
+			GameManager.instance.config.addPiece(tempL);
+		} 
+		else 
+		{
 			Debug.Log ("Limit of pices reached");
 		}
 
@@ -43,7 +46,17 @@ public class MainFunctions : MonoBehaviour {
 		//create joint between pieces
 	}
 
-
+	public void zoom(bool zoomIn)
+	{
+		if (zoomIn && Camera.main.transform.position.y > 5) 
+		{
+			Camera.main.transform.Translate (Vector3.forward * Time.deltaTime * GameManager.instance.parameters.zoomSpeed);
+		}
+		else if (!zoomIn && Camera.main.transform.position.y < 28) 
+		{
+			Camera.main.transform.Translate (Vector3.back * Time.deltaTime * GameManager.instance.parameters.zoomSpeed);
+		}
+	}
 
 
 

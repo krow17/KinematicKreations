@@ -11,6 +11,12 @@ public class Config : MonoBehaviour {
 	void Start () {
 		
 	}
+
+	public void addPiece(GameObject pieceToAdd)
+	{
+		numberOfPieces++;
+		configuration.Add (pieceToAdd);
+	}
 	
 	// Update is called once per frame
 	void Update () {

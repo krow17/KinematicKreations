@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Parameters : MonoBehaviour {
+public class Magnet : MonoBehaviour {
 
-	public int maxDragSpeed = 20;
-	public int forceMultiplier = 5;
-	public int zoomSpeed = 30;
+	public enum Pole {North, South}
 
-
+	public Pole pole;
 
 	// Use this for initialization
 	void Start () {
