@@ -15,6 +15,19 @@ public class MainFunctions : MonoBehaviour {
 		
 	}
 
+	public void playCreateModeSwitch()
+	{
+		if (GameManager.instance.playMode) 
+		{
+			unselectAllPieces ();
+			GameManager.instance.playMode = false;
+		}
+		else
+		{
+			GameManager.instance.playMode = true;
+		}
+	}
+
 	public void addPiece()
 	{
 		Debug.Log ("clicked");
@@ -31,19 +44,51 @@ public class MainFunctions : MonoBehaviour {
 		//instantiate piece and add it to the correct files
 	}
 
-	public void removePiece()
+	public void removePiece(GameObject pieceToRemove)
 	{
-		//delete piece and delete from correct files
+		GameManager.instance.config.configuration.Remove(pieceToRemove);
+		// REMOVE ALL JOINTS!!!!!!!!
+		List<Magnet> magnets = pieceToRemove.GetComponentsInChildren<Magnet>();
+		foreach(Magnet m in magnets)
+		{
+			removeJoint (m);
+		}
+		Destroy (pieceToRemove);
 	}
 
-	public void selectPiece()
+	public void selectPiece(GameObject piece)
 	{
-		//select piece
+		piece.GetComponent<LShape> ().selected = true;
+		GameManager.instance.config.currentSelection = piece;
 	}
 
-	public void addJoint()
+	public void unselectPiece(GameObject piece)
 	{
+		piece.GetComponent<LShape> ().selected = false;
+		GameManager.instance.config.currentSelection = null;
+	}
+
+	public void unselectAllPieces()
+	{
+		foreach (GameObject p in GameManager.instance.config.configuration) {
+			unselectPiece (p);
+		}
+	}
+
+	public void addJoint(GameObject magnetOne, GameObject magnetTwo)
+	{
+		//check they are free or ERROR
+		//check Poles are opposite or ERROR
+		// make magnet.connection = to opposite for each
+		//connect joints
 		//create joint between pieces
+	}
+
+	public void removeJoint(GameObject magnet)
+	{
+		if (magnet.GetComponent<Magnet> ().connection != null) {
+			//remove joint between pieces
+		}
 	}
 
 	public void zoom(bool zoomIn)

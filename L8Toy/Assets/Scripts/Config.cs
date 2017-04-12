@@ -5,8 +5,9 @@ using UnityEngine;
 public class Config : MonoBehaviour {
 
 	public int numberOfPieces;
+	public GameObject currentSelection;
 
-	public static List<GameObject> configuration = new List<GameObject> ();
+	public List<GameObject> configuration = new List<GameObject> ();
 	// Use this for initialization
 	void Start () {
 		

@@ -2,13 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Magnet : MonoBehaviour {
-
-	public enum Pole {North, South}
-
-	public Pole pole;
-
-	public GameObject connection;
+public class Glow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class LShape : MonoBehaviour {
 
-	public enum Color {Blue,White,Yellow,Red};
+	public enum Colors {Blue,White,Yellow,Red};
 
-	int layer;
-	Color color;
-	bool selected;
+	public int layer;
+	public Colors color;
+	public Color glowColor;
+	public bool selected;
 
 	public GameObject northOne;
 	public GameObject northTwo;
@@ -18,48 +19,52 @@ public class LShape : MonoBehaviour {
 	public GameObject southTwo;
 	public GameObject southThree;
 
+	public float highlightTimer;
+
 	void Start () {
+		highlightTimer = 0;
 		layer = 0;
-		color = Color.Blue; //WE SHOULD RANDOMIZE;
+		color = Colors.Blue; //WE SHOULD RANDOMIZE;
 		selected = true;
 		transform.position = new Vector3 (0, 0, 0);
-		CheckLocation();
 	}
 
-	public void changeColor(Color newColor)
+	public void changeColor(Colors newColor)
 	{
 		switch(newColor)
 		{
-		case Color.Blue:
-			color = Color.Blue;
+		case Colors.Blue:
+			color = Colors.Blue;
 			this.GetComponent<Renderer> ().material = GameManager.instance.blueMat;
 			break;
-		case Color.White:
-			color = Color.White;
+		case Colors.White:
+			color = Colors.White;
 			this.GetComponent<Renderer> ().material = GameManager.instance.whiteMat;
 			break;
-		case Color.Yellow:
-			color = Color.Yellow;
+		case Colors.Yellow:
+			color = Colors.Yellow;
 			this.GetComponent<Renderer> ().material = GameManager.instance.yellowMat;
 			break;
-		case Color.Red:
-			color = Color.Red;
+		case Colors.Red:
+			color = Colors.Red;
 			this.GetComponent<Renderer> ().material = GameManager.instance.redMat;
 			break;
 		}
 	}
 
+	void glow()
+	{
+		if (selected) {
+			highlightTimer += Time.deltaTime;
+			float emission = Mathf.PingPong (highlightTimer, 1.0f);
+			GetComponent<Collider> ().GetComponent<Renderer> ().material.SetColor ("_EmissionColor", glowColor * Mathf.LinearToGammaSpace (emission));
+		} else {
+			highlightTimer = 0;
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
-		
+		glow ();
 	}
-
-	Vector3 CheckLocation(){
-		//Vector3 vec = new Vector3 (0, 0, 0);
-		//vec = Config.configuration [0].transform.position;
-		//return vec;
-		return this.transform.position;
-	}
-
-
 }
