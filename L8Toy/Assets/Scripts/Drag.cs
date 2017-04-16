@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Drag : MonoBehaviour {
 
-    Vector2 previousPosition;
-    Vector3 forceDirection;
+    public Vector3 previousPosition;
+    public Vector3 forceDirection;
 	public bool touched = false;
 	void Start () {
 
@@ -49,39 +49,91 @@ public class Drag : MonoBehaviour {
 
         if (Input.touchCount > 0)
         {
-            Debug.Log("Touch count = " + Input.touchCount);
+            //Debug.Log("Touch count = " + Input.touchCount);
 
-            foreach (Touch t in Input.touches)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(t.position);
+			if (Input.touchCount > 1) {
 
-                switch (t.phase)
-                {
-                    case TouchPhase.Began:
-                        if (Physics.Raycast(ray, out hit))
-                        {
-                            if (hit.collider == this.GetComponent<Collider>())
-                            {
-                                touched = true;
-                                previousPosition = t.position;
-                                Debug.Log("You hit the " + hit.transform.name);
-                            }
-                        }
-                        break;
+				foreach (Touch t in Input.touches) {
+					Ray ray = Camera.main.ScreenPointToRay (t.position);
 
-                    case TouchPhase.Moved:
-                        forceDirection = previousPosition - t.position;
-                        transform.GetComponent<Rigidbody>().AddForce(forceDirection);
-                        previousPosition = t.position;
-                        break;
+					switch (t.phase) {
+					case TouchPhase.Began:
+						if (Physics.Raycast (ray, out hit)) {
+							if (hit.collider == transform.GetComponent<Collider> ()) {
+								touched = true;
+								previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
+								Debug.Log ("You hit the " + hit.transform.name);
+							}
+						}
+						break;
 
-                    case TouchPhase.Ended:
-                        GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-                        GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-                        touched = false;
-                        break;
-                }
-            }
+					case TouchPhase.Stationary:
+						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+						//GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
+						break;
+					case TouchPhase.Moved:
+						if (touched) {
+							//forceDirection = new Vector3(t.position.x ,0 , t.position.y) - previousPosition;
+							forceDirection = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
+							Debug.DrawLine (transform.position, forceDirection, Color.red);
+							transform.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
+						}
+						break;
+
+					case TouchPhase.Ended:
+						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+		                //GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+						touched = false;
+						break;
+					}
+				}
+			}
+			else
+			{
+				foreach (Touch t in Input.touches) {
+					Ray ray = Camera.main.ScreenPointToRay (t.position);
+
+					switch (t.phase) {
+					case TouchPhase.Began:
+						if (Physics.Raycast (ray, out hit)) {
+							if (hit.collider == transform.GetComponent<Collider> ()) {
+								touched = true;
+								previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
+								Debug.Log ("You hit the " + hit.transform.name);
+							}
+						}
+						break;
+
+					case TouchPhase.Stationary:
+						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+						GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
+						break;
+					case TouchPhase.Moved:
+						if (touched) {
+							//forceDirection = new Vector3(t.position.x ,0 , t.position.y) - previousPosition;
+							forceDirection = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
+							Debug.DrawLine (transform.position, forceDirection, Color.red);
+							foreach (GameObject L in GameManager.instance.config.configuration)
+							{
+								L.transform.GetComponent<Rigidbody> ().AddForce(forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
+						}
+						break;
+
+					case TouchPhase.Ended:
+						foreach (GameObject L in GameManager.instance.config.configuration)
+						{
+							GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+							GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+						}
+						touched = false;
+						break;
+					}
+				}
+			}
+				
         }
         else
         {
