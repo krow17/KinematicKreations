@@ -48,10 +48,10 @@ public class MainFunctions : MonoBehaviour {
 	{
 		GameManager.instance.config.configuration.Remove(pieceToRemove);
 		// REMOVE ALL JOINTS!!!!!!!!
-		List<Magnet> magnets = pieceToRemove.GetComponentsInChildren<Magnet>();
-		foreach(Magnet m in magnets)
+		//List<Magnet> magnets = pieceToRemove.GetComponentsInChildren<Magnet>();
+		//foreach(Magnet m in magnets)
 		{
-			removeJoint (m);
+			//removeJoint (m);
 		}
 		Destroy (pieceToRemove);
 	}
