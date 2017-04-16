@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Drag : MonoBehaviour {
-	public Vector3 gameObjectSreenPoint;
-	public Vector3 force;
-	public bool selected;
+
+    Vector2 previousPosition;
+    Vector3 forceDirection;
+	public bool touched = false;
 	void Start () {
 
 	}
@@ -18,89 +19,76 @@ public class Drag : MonoBehaviour {
 	}
 
 
-	void MouseTouch()
-	{
-		if (Input.GetMouseButtonDown (0)) {
-			gameObjectSreenPoint = Camera.main.WorldToScreenPoint (gameObject.transform.position);
+    //void MouseTouch()
+    //{
+    //	if (Input.GetMouseButtonDown (0)) {
+    //		gameObjectSreenPoint = Camera.main.WorldToScreenPoint (gameObject.transform.position);
 
-			RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+    //		RaycastHit hit;
+    //		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 
-			if (Physics.Raycast (ray, out hit)) {
+    //		if (Physics.Raycast (ray, out hit)) {
 
-				//Touch firstTouch = Input.GetTouch (i);
-				//int fingerID1 = firstTouch.fingerId;
+    //			//Touch firstTouch = Input.GetTouch (i);
+    //			//int fingerID1 = firstTouch.fingerId;
 
-				//Vector2 vec = (firstTouch.deltaPosition) / firstTouch.deltaTime;
+    //			//Vector2 vec = (firstTouch.deltaPosition) / firstTouch.deltaTime;
 
-				//force = new Vector3 (vec.x, vec.y, gameObjectSreenPoint.z);
+    //			//force = new Vector3 (vec.x, vec.y, gameObjectSreenPoint.z);
 
-				Debug.Log ("You hit the " + hit.transform.name);
-				//hit.rigidbody.AddForce (force * 10);
-			}
-		}
-	}
-
-
-	void ObjectTouch() {
-		GameObject obj; 
-		bool select = false;
-		gameObjectSreenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
-		RaycastHit hit;
+    //			Debug.Log ("You hit the " + hit.transform.name);
+    //			//hit.rigidbody.AddForce (force * 10);
+    //		}
+    //	}
+    //}
 
 
-		if (Input.touchCount > 0) {
-			Debug.Log ("Touch count = " + Input.touchCount);
+    void ObjectTouch()
+    {
+        RaycastHit hit;
 
-			for (int i = 0; i < Input.touchCount; i++) {
+        if (Input.touchCount > 0)
+        {
+            Debug.Log("Touch count = " + Input.touchCount);
 
-				if (Input.GetTouch (i).phase == TouchPhase.Began) {
+            foreach (Touch t in Input.touches)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(t.position);
 
-					Ray ray = Camera.main.ScreenPointToRay (Input.GetTouch (i).position);
+                switch (t.phase)
+                {
+                    case TouchPhase.Began:
+                        if (Physics.Raycast(ray, out hit))
+                        {
+                            if (hit.collider == this.GetComponent<Collider>())
+                            {
+                                touched = true;
+                                previousPosition = t.position;
+                                Debug.Log("You hit the " + hit.transform.name);
+                            }
+                        }
+                        break;
 
-					if (Physics.Raycast (ray, out hit)){
+                    case TouchPhase.Moved:
+                        forceDirection = previousPosition - t.position;
+                        transform.GetComponent<Rigidbody>().AddForce(forceDirection);
+                        previousPosition = t.position;
+                        break;
 
-						if (hit.collider == this.GetComponent<Collider> ()) {
-							Debug.Log ("You hit the " + hit.transform.name);
-
-							if (Input.GetTouch (i).phase == TouchPhase.Moved) {
-								Debug.Log ("phase = moved");
-
-								Touch firstTouch = Input.GetTouch (i);
-								int fingerID1 = firstTouch.fingerId;
-
-								Vector2 vec = (firstTouch.deltaPosition) / firstTouch.deltaTime;
-								force = new Vector3 (vec.x, vec.y, gameObjectSreenPoint.z);
-
-
-								hit.rigidbody.AddForce (force * 10);
-								Debug.Log ("force: " + force + "added");
-							}
-
-
-						}
-
-
-					}
-
-				}
-
-
-				if (Input.GetTouch (i).phase == TouchPhase.Ended) {
-					GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-					GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
-
-				}
-			}
-
-		}
-		else
-
-			GetComponent<Rigidbody> ().velocity = new Vector3(0, 0, 0);
-		GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
-
-	}
-
+                    case TouchPhase.Ended:
+                        GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+                        GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+                        touched = false;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+        }
+    }
 
 }
 
