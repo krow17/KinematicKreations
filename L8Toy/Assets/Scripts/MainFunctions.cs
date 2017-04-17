@@ -12,7 +12,7 @@ public class MainFunctions : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 
 	public void playCreateModeSwitch()
@@ -49,12 +49,20 @@ public class MainFunctions : MonoBehaviour {
 	{
 		GameManager.instance.config.configuration.Remove(pieceToRemove);
 
-		Magnet[] magnets = pieceToRemove.GetComponentsInChildren<Magnet>();
-		foreach(Magnet m in magnets)
+		GameObject[] magnets = pieceToRemove.GetComponentsInChildren<Transform>() as GameObject;
+		foreach(GameObject m in magnets)
 		{
-			//removeJoint (m); //pass in game object
+			removeJoint (m); 
 		}
 		Destroy (pieceToRemove);
+	}
+
+	public void clear (){
+		unselectAllPieces;
+		for (int i = 0; i < GameManager.instance.config.configuration.Count; i++) {
+			GameManager.instance.config.configuration.Remove (GameManager.instance.config.configuration [i]);
+			Destroy(GameManager.instance.config.configuration [i]);
+		}
 	}
 
 	public void selectPiece(GameObject piece)
@@ -102,11 +110,11 @@ public class MainFunctions : MonoBehaviour {
 
 
 	}
-	 
+
 	public void removeJoint(GameObject magnet)
 	{
 		if (magnet.GetComponent<Magnet>().connection != null) {
-			
+
 			GameObject obj = magnet.GetComponent<Magnet>().connection;
 
 			Destroy(magnet.GetComponent<HingeJoint>());
@@ -157,6 +165,6 @@ public class MainFunctions : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 }
