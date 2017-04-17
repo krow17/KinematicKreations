@@ -8,7 +8,7 @@ public class Config : MonoBehaviour {
 	public GameObject currentSelection;
 
 	public List<GameObject> configuration = new List<GameObject> ();
-	public List<SubConfig> subconfigs = new List<GameObject> ();
+	public List<SubConfig> subconfigs = new List<SubConfig> ();
 	// Use this for initialization
 	void Start () {
 		
@@ -18,7 +18,7 @@ public class Config : MonoBehaviour {
 	{
 		numberOfPieces++;
 		configuration.Add (pieceToAdd);
-		subconfigs.Add (pieceToAdd);
+		subconfigs.Add (new SubConfig());
 	}
 	
 	// Update is called once per frame
