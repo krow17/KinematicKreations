@@ -27,8 +27,27 @@ public class SubConfig : MonoBehaviour {
 	}
 
 
-	void Split(){
+	public SubConfig Split(){
 
+		bool complete = false;
+		SubConfig List1 = new SubConfig ();
+		SubConfig List2 = new SubConfig ();
+
+		List1.subconfiguration.Add (subconfiguration[0]);
+
+		while (!complete) {
+			complete = checkListForL (ref List1);
+		}
+
+		foreach (GameObject L in subconfiguration) {
+			if (!List1.subconfiguration.Contains (L)) {
+				List2.subconfiguration.Add (L);
+			}
+		}
+
+		subconfiguration = List1.subconfiguration;
+		return List2;
+			
 		//declare new list, put first l in it
 		// check 1st L's joints for any other L that is in the OG list
 				// if connected, put that other L in the new List
@@ -37,6 +56,27 @@ public class SubConfig : MonoBehaviour {
 				// once exhaused, put remaining L's in OG list to 2nd new List
 
 
+	}
+
+	bool checkListForL(ref SubConfig List1)
+	{
+		foreach (GameObject shape in List1.subconfiguration) {
+			Magnet[] mag = shape.GetComponent<LShape>().GetComponentsInChildren<Magnet>();
+
+			foreach (Magnet m in mag) {
+				if (m.connection != null) {
+					foreach (GameObject L in subconfiguration) {
+						if (m.connection.GetComponent<Magnet>().LShape == L) {
+							if (!List1.subconfiguration.Contains (L)) {
+								List1.subconfiguration.Add (L);
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 

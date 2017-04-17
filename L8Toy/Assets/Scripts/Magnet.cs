@@ -9,7 +9,7 @@ public class Magnet : MonoBehaviour {
 	public Pole pole;
 
 	public GameObject connection;
-
+	public GameObject LShape;
 	// Use this for initialization
 	void Start () {
 		
