@@ -113,6 +113,22 @@ public class MainFunctions : MonoBehaviour {
 				magnetOne.GetComponent<HingeJoint> ().connectedBody = magnetTwo.GetComponent<Rigidbody> ();
 				magnetTwo.GetComponent<HingeJoint> ().connectedBody = magnetOne.GetComponent<Rigidbody> ();
 
+                foreach(SubConfig sc in GameManager.instance.config.subconfigs)
+                {
+                    if (sc.subconfiguration.Contains(magnetOne.GetComponent<Magnet>().LShape))
+                    {
+                        foreach (SubConfig sc2 in GameManager.instance.config.subconfigs)
+                        {
+                            if (sc2.subconfiguration.Contains(magnetTwo.GetComponent<Magnet>().LShape))
+                            {
+                                sc.Merge(sc2);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
 				//magnetOne.GetComponentInParent<HingeJoint> ().connectedBody = magnetTwo.GetComponentInParent<Rigidbody> ();
 				//magnetTwo.GetComponentInParent<HingeJoint> ().connectedBody = magnetOne.GetComponentInParent<Rigidbody> ();
 

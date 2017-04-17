@@ -116,7 +116,7 @@ public class SubConfig {
 	}
 
 
-	void Merge(SubConfig con1){
+	public void Merge(SubConfig con1){
 		
 		foreach (GameObject c in con1.subconfiguration) {
 			subconfiguration.Add (c);
