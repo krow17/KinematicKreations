@@ -18,31 +18,6 @@ public class Drag : MonoBehaviour {
 
 	}
 
-
-    //void MouseTouch()
-    //{
-    //	if (Input.GetMouseButtonDown (0)) {
-    //		gameObjectSreenPoint = Camera.main.WorldToScreenPoint (gameObject.transform.position);
-
-    //		RaycastHit hit;
-    //		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-
-    //		if (Physics.Raycast (ray, out hit)) {
-
-    //			//Touch firstTouch = Input.GetTouch (i);
-    //			//int fingerID1 = firstTouch.fingerId;
-
-    //			//Vector2 vec = (firstTouch.deltaPosition) / firstTouch.deltaTime;
-
-    //			//force = new Vector3 (vec.x, vec.y, gameObjectSreenPoint.z);
-
-    //			Debug.Log ("You hit the " + hit.transform.name);
-    //			//hit.rigidbody.AddForce (force * 10);
-    //		}
-    //	}
-    //}
-
-
     void ObjectTouch()
     {
         RaycastHit hit;
