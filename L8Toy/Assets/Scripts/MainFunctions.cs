@@ -17,14 +17,14 @@ public class MainFunctions : MonoBehaviour {
 
 	public void playCreateModeSwitch()
 	{
-		if (GameManager.instance.playMode) 
+		if (!GameManager.instance.playMode) 
 		{
-			unselectAllPieces ();
-			GameManager.instance.playMode = false;
+			unselectAllPieces();
+			GameManager.instance.playMode = true;
 		}
 		else
 		{
-			GameManager.instance.playMode = true;
+			GameManager.instance.playMode = false;
 		}
 	}
 
@@ -77,13 +77,14 @@ public class MainFunctions : MonoBehaviour {
 
 	public void selectPiece(GameObject piece)
 	{
+		unselectAllPieces();
 		piece.GetComponent<LShape> ().selected = true;
 		GameManager.instance.config.currentSelection = piece;
 	}
 
 	public void unselectPiece(GameObject piece)
 	{
-		piece.GetComponent<LShape> ().selected = false;
+		piece.GetComponent<LShape>().selected = false;
 		GameManager.instance.config.currentSelection = null;
 	}
 

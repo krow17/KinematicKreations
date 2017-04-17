@@ -16,16 +16,14 @@ public class ButtonScript : MonoBehaviour {
 	}
 
 	public void addRemoveButton(bool addL)
-	{	
-		if (addL) 
-		{
-			GameManager.instance.mfuncs.addPiece();
-		}
-		else
-		{
-			if (GameManager.instance.config.currentSelection != null)
-			{
-				GameManager.instance.mfuncs.removePiece(GameManager.instance.config.currentSelection);
+	{
+		if (!GameManager.instance.playMode) {
+			if (addL) {
+				GameManager.instance.mfuncs.addPiece();
+			} else {
+				if (GameManager.instance.config.currentSelection != null) {
+					GameManager.instance.mfuncs.removePiece (GameManager.instance.config.currentSelection);
+				}
 			}
 		}
 	}
@@ -76,11 +74,11 @@ public class ButtonScript : MonoBehaviour {
 	public void playCreateButton()
 	{
 		if (GameManager.instance.playMode) {
-			GetComponent<Image> ().sprite = GameManager.instance.createImage;
-		} else {
 			GetComponent<Image> ().sprite = GameManager.instance.playImage;
+		} else {
+			GetComponent<Image> ().sprite = GameManager.instance.createImage;
 
 		}
-		GameManager.instance.mfuncs.playCreateModeSwitch ();
+		GameManager.instance.mfuncs.playCreateModeSwitch();
 	}
 }

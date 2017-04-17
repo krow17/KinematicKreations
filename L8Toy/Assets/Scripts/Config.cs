@@ -20,6 +20,11 @@ public class Config : MonoBehaviour {
 		configuration.Add (pieceToAdd);
 		subconfigs.Add (new SubConfig());
 	}
+
+	public void removePiece()
+	{
+		
+	}
 	
 	// Update is called once per frame
 	void Update () {

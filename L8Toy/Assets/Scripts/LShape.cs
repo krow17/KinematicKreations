@@ -70,6 +70,7 @@ public class LShape : MonoBehaviour {
 			float emission = Mathf.PingPong (highlightTimer, 1.0f);
 			GetComponent<Collider> ().GetComponent<Renderer> ().material.SetColor ("_EmissionColor", glowColor * Mathf.LinearToGammaSpace (emission));
 		} else {
+			GetComponent<Collider> ().GetComponent<Renderer> ().material.SetColor ("_EmissionColor", Color.black);
 			highlightTimer = 0;
 		}
 	}
