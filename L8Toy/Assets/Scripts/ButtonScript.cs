@@ -30,13 +30,31 @@ public class ButtonScript : MonoBehaviour {
 
 	public void changeLayer(string direction)
 	{
-		switch (direction) 
+        if (GameManager.instance.config.currentSelection == null)
+        {
+            return;
+        }
+            switch (direction) 
 		{
 		case "raise":
+                foreach (SubConfig sc in GameManager.instance.config.subconfigs)
+                {
+                    if (sc.subconfiguration.Contains(GameManager.instance.config.currentSelection))
+                    {
+                        sc.Raise();
+                    }
+                }
 			break;
 
 		case "lower":
-			break;
+                foreach (SubConfig sc in GameManager.instance.config.subconfigs)
+                {
+                    if (sc.subconfiguration.Contains(GameManager.instance.config.currentSelection))
+                    {
+                        sc.Lower();
+                    }
+                }
+                break;
 		}
 	}
 

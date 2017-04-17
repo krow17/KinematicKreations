@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SubConfig : MonoBehaviour {
+[System.Serializable]
+public class SubConfig {
 
-	List<GameObject> subconfiguration;
+	public List<GameObject> subconfiguration = new List<GameObject>();
 
 
 	void Move(){
@@ -13,18 +14,53 @@ public class SubConfig : MonoBehaviour {
 	}
 
 
-	void Raise(){
-		foreach (GameObject con in subconfiguration) {
-			con.GetComponent<LShape> ().layer++;
-		}
+	public void Raise(){
+        if (!checkLayerLimits("raise"))
+        {
+            foreach (GameObject con in subconfiguration)
+            {
+                con.GetComponent<LShape>().layer++;
+                con.GetComponent<Transform>().position += new Vector3(0, GameManager.instance.parameters.layerThickness, 0);
+            }
+        }
 	}
 
-	void Lower(){
-		foreach (GameObject con in subconfiguration) {
-			con.GetComponent<LShape> ().layer--;
-		}
-
+	public void Lower(){
+        if (!checkLayerLimits("lower"))
+        {
+            foreach (GameObject con in subconfiguration)
+            {
+                con.GetComponent<LShape>().layer--;
+                con.GetComponent<Transform>().position -= new Vector3(0, GameManager.instance.parameters.layerThickness, 0);
+            }
+        }
 	}
+
+    bool checkLayerLimits(string raiseOrLower)
+    {
+        switch(raiseOrLower)
+        {
+            case "raise":
+                foreach (GameObject con in subconfiguration)
+                {
+                    if (con.GetComponent<LShape>().layer == GameManager.instance.parameters.layerLimit)
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case "lower":
+                foreach (GameObject con in subconfiguration)
+                {
+                    if (con.GetComponent<LShape>().layer == -GameManager.instance.parameters.layerLimit)
+                    {
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
+    }
 
 
 	public SubConfig Split(){

@@ -18,7 +18,9 @@ public class Config : MonoBehaviour {
 	{
 		numberOfPieces++;
 		configuration.Add (pieceToAdd);
-		subconfigs.Add (new SubConfig());
+        SubConfig sc = new SubConfig();
+        sc.subconfiguration.Add(pieceToAdd);
+		subconfigs.Add (sc);
 	}
 
 	public void removePiece()
