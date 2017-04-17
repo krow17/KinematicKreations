@@ -69,10 +69,13 @@ public class MainFunctions : MonoBehaviour {
 
 	public void clear (){
 		unselectAllPieces();
-		for (int i = 0; i < GameManager.instance.config.configuration.Count; i++) {
-			GameManager.instance.config.configuration.Remove (GameManager.instance.config.configuration [i]);
-			Destroy(GameManager.instance.config.configuration [i]);
-		}
+        foreach (GameObject L in GameManager.instance.config.configuration)
+        {
+            Destroy(L);
+        }
+        GameManager.instance.config.subconfigs.Clear();
+        GameManager.instance.config.configuration.Clear();
+        GameManager.instance.config.numberOfPieces = 0;
 	}
 
 	public void selectPiece(GameObject piece)
