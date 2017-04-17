@@ -128,12 +128,20 @@ public class MainFunctions : MonoBehaviour {
 
 			GameObject obj = magnet.GetComponent<Magnet>().connection;
 
-			Destroy(magnet.GetComponent<HingeJoint>());
-			Destroy(obj.GetComponent<HingeJoint>());
+			magnet.GetComponent<HingeJoint>().connectedBody = null;
+			obj.GetComponent<HingeJoint>().connectedBody = null;
 
 			obj.GetComponent<Magnet>().connection = null;
 			magnet.GetComponent<Magnet>().connection = null;
 
+			foreach (SubConfig config in GameManager.instance.config.subconfigs) {
+				
+				if (config.subconfiguration.Contains (obj.GetComponent<Magnet> ().LShape)) {
+					GameManager.instance.config.subconfigs.Add (config.Split ());
+					break;
+				}
+			}
+				
 		}
 	}
 
