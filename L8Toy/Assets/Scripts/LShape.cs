@@ -12,24 +12,16 @@ public class LShape : MonoBehaviour {
 	public Color glowColor;
 	public bool selected;
 
-	public Magnet northOne;
-	public Magnet northTwo;
-	public Magnet northThree;
-	public Magnet southOne;
-	public Magnet southTwo;
-	public Magnet southThree;
+	public GameObject northOne;
+	public GameObject northTwo;
+	public GameObject northThree;
+	public GameObject southOne;
+	public GameObject southTwo;
+	public GameObject southThree;
 
 	public float highlightTimer;
 
 	void Start () {
-		
-		northOne.GetComponent<Magnet> ().pole = Magnet.Pole.North;
-		northTwo.GetComponent<Magnet> ().pole = Magnet.Pole.North;
-		northThree.GetComponent<Magnet> ().pole = Magnet.Pole.North;
-
-		southOne.GetComponent<Magnet> ().pole = Magnet.Pole.South;
-		southTwo.GetComponent<Magnet> ().pole = Magnet.Pole.South;
-		southThree.GetComponent<Magnet> ().pole = Magnet.Pole.South;
 
 		highlightTimer = 0;
 		layer = 0;
@@ -45,8 +37,6 @@ public class LShape : MonoBehaviour {
 		if (val == 3)
 				color = Colors.Red;
 		
-
-		selected = true;
 		transform.position = new Vector3 (0, 0, 0);
 	}
 

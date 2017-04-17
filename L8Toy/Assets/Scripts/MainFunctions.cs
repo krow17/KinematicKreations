@@ -35,6 +35,8 @@ public class MainFunctions : MonoBehaviour {
 		{
 			GameObject tempL = Instantiate (LPiece, Vector3.zero, Quaternion.identity);
 			GameManager.instance.config.addPiece(tempL);
+			//NOTE: NEED TO DD TO OWN SUBCONFIG
+			selectPiece (tempL);
 		} 
 		else 
 		{
@@ -47,18 +49,26 @@ public class MainFunctions : MonoBehaviour {
 
 	public void removePiece(GameObject pieceToRemove)
 	{
-		GameManager.instance.config.configuration.Remove(pieceToRemove);
 
-		GameObject[] magnets = pieceToRemove.GetComponentsInChildren<Transform>() as GameObject;
+		List<GameObject> magnets = new List<GameObject> ();
+
+		magnets.Add (pieceToRemove.GetComponent<LShape>().northOne);
+		magnets.Add (pieceToRemove.GetComponent<LShape>().northTwo);
+		magnets.Add (pieceToRemove.GetComponent<LShape>().northThree);
+		magnets.Add (pieceToRemove.GetComponent<LShape>().southOne);
+		magnets.Add (pieceToRemove.GetComponent<LShape>().southTwo);
+		magnets.Add (pieceToRemove.GetComponent<LShape>().southThree);
+
 		foreach(GameObject m in magnets)
 		{
 			removeJoint (m); 
 		}
+		GameManager.instance.config.configuration.Remove(pieceToRemove);
 		Destroy (pieceToRemove);
 	}
 
 	public void clear (){
-		unselectAllPieces;
+		unselectAllPieces();
 		for (int i = 0; i < GameManager.instance.config.configuration.Count; i++) {
 			GameManager.instance.config.configuration.Remove (GameManager.instance.config.configuration [i]);
 			Destroy(GameManager.instance.config.configuration [i]);

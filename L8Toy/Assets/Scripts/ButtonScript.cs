@@ -19,7 +19,7 @@ public class ButtonScript : MonoBehaviour {
 	{	
 		if (addL) 
 		{
-			GameManager.instance.mfuncs.addPiece ();
+			GameManager.instance.mfuncs.addPiece();
 		}
 		else
 		{
@@ -27,6 +27,18 @@ public class ButtonScript : MonoBehaviour {
 			{
 				GameManager.instance.mfuncs.removePiece(GameManager.instance.config.currentSelection);
 			}
+		}
+	}
+
+	public void changeLayer(string direction)
+	{
+		switch (direction) 
+		{
+		case "raise":
+			break;
+
+		case "lower":
+			break;
 		}
 	}
 

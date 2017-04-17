@@ -13,7 +13,6 @@ public class Drag : MonoBehaviour {
 
 
 	public void FixedUpdate(){
-		//MouseTouch ();
 		ObjectTouch ();
 
 	}
@@ -24,9 +23,7 @@ public class Drag : MonoBehaviour {
 
         if (Input.touchCount > 0)
         {
-            //Debug.Log("Touch count = " + Input.touchCount);
-
-			if (Input.touchCount > 1) {
+			if (Input.touchCount  == 2) {
 
 				foreach (Touch t in Input.touches) {
 					Ray ray = Camera.main.ScreenPointToRay (t.position);
@@ -44,7 +41,6 @@ public class Drag : MonoBehaviour {
 
 					case TouchPhase.Stationary:
 						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-						//GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
 						break;
 					case TouchPhase.Moved:
 						if (touched) {
@@ -64,7 +60,7 @@ public class Drag : MonoBehaviour {
 					}
 				}
 			}
-			else
+			else if (Input.touchCount == 1)
 			{
 				foreach (Touch t in Input.touches) {
 					Ray ray = Camera.main.ScreenPointToRay (t.position);
@@ -91,7 +87,7 @@ public class Drag : MonoBehaviour {
 							Debug.DrawLine (transform.position, forceDirection, Color.red);
 							foreach (GameObject L in GameManager.instance.config.configuration)
 							{
-								L.transform.GetComponent<Rigidbody> ().AddForce(forceDirection * GameManager.instance.parameters.forceMultiplier);
+								L.transform.GetComponent<Rigidbody>().AddForce(forceDirection * GameManager.instance.parameters.forceMultiplier);
 							}
 							previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
 						}
@@ -108,7 +104,11 @@ public class Drag : MonoBehaviour {
 					}
 				}
 			}
-				
+			else
+			{
+				GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+				GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+			}
         }
         else
         {
