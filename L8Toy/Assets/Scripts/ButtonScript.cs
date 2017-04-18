@@ -89,7 +89,12 @@ public class ButtonScript : MonoBehaviour {
 		GameManager.instance.mfuncs.zoom (zoomIn);
 	}
 
-	public void playCreateButton()
+    public void viewAll()
+    {
+        GameManager.instance.mfuncs.viewAll();
+    }
+
+    public void playCreateButton()
 	{
 		if (GameManager.instance.playMode) {
 			GetComponent<Image> ().sprite = GameManager.instance.playImage;

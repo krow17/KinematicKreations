@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-
 	public Material blueMat;
 	public Material whiteMat;
 	public Material yellowMat;

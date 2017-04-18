@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class MainFunctions : MonoBehaviour {
 
-
-	public GameObject LPiece;
+    public GameObject LPiece;
 
 	//Use this to add all the main functions we will call.
 
@@ -40,7 +39,7 @@ public class MainFunctions : MonoBehaviour {
 		} 
 		else 
 		{
-			Debug.Log ("Limit of pices reached");
+			Debug.Log ("Limit of pieces reached");
 		}
 
 
@@ -169,14 +168,23 @@ public class MainFunctions : MonoBehaviour {
 		if (zoomIn && Camera.main.transform.position.y > 5) 
 		{
 			Camera.main.transform.Translate (Vector3.forward * Time.deltaTime * GameManager.instance.parameters.zoomSpeed);
-		}
+            GameObject.Find("3D Camera").transform.Translate(Vector3.forward * Time.deltaTime * GameManager.instance.parameters.zoomSpeed);
+        }
 		else if (!zoomIn && Camera.main.transform.position.y < 28) 
 		{
 			Camera.main.transform.Translate (Vector3.back * Time.deltaTime * GameManager.instance.parameters.zoomSpeed);
-		}
+            GameObject.Find("3D Camera").transform.Translate(Vector3.back * Time.deltaTime * GameManager.instance.parameters.zoomSpeed);
+        }
 	}
 
-	public void changeColorOfSelectedL(string color)
+    public void viewAll()
+    {
+        float zoomOutDistance = 28.0f - Camera.main.transform.position.y + 0.01f;
+        Camera.main.transform.Translate(Vector3.back * zoomOutDistance);
+        GameObject.Find("3D Camera").transform.Translate(Vector3.back * zoomOutDistance);
+    }
+
+    public void changeColorOfSelectedL(string color)
 	{
 		if (GameManager.instance.config.currentSelection != null) {
 			switch(color)
