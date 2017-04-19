@@ -11,6 +11,10 @@ public class Parameters : MonoBehaviour {
     public float layerThickness = 0.025f;
     public int layerLimit = 4;
 
+	public Color buttonColor = new Color(1, 1, 1, 1);
+	public Color buttonColorFaded = new Color (1, 1, 1, 0.5f);
+
+
 
 
 	// Use this for initialization
