@@ -20,10 +20,12 @@ public class MainFunctions : MonoBehaviour {
 		{
 			unselectAllPieces();
 			GameManager.instance.playMode = true;
+			MagnetToggle (false);
 		}
 		else
 		{
 			GameManager.instance.playMode = false;
+			MagnetToggle (true);
 		}
 	}
 
@@ -36,6 +38,7 @@ public class MainFunctions : MonoBehaviour {
 			GameManager.instance.config.addPiece(tempL);
 			//NOTE: NEED TO DD TO OWN SUBCONFIG
 			selectPiece (tempL);
+			MagnetToggle (true);
 		} 
 		else 
 		{
@@ -204,7 +207,28 @@ public class MainFunctions : MonoBehaviour {
 
 			}
 		}
+	
+	}
 
+	public void MagnetToggle(bool on){
+		if (on == false) {
+			foreach (GameObject p in GameManager.instance.config.configuration) {
+				Magnet[] mag = p.GetComponentsInChildren<Magnet> ();
+
+				foreach (Magnet m in mag) {
+					m.GetComponent<CapsuleCollider> ().enabled = false; //NOTE: MAKE CAPSULE COLLIDERS FOR MAGNETS
+				}
+			}
+		} else {
+			foreach (GameObject p in GameManager.instance.config.configuration) {
+				Magnet[] mag = p.GetComponentsInChildren<Magnet> ();
+
+				foreach (Magnet m in mag) {
+					m.GetComponent<CapsuleCollider> ().enabled = true;
+				}
+			}
+
+		}
 	}
 
 

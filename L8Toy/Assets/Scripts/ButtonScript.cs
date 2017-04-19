@@ -91,6 +91,15 @@ public class ButtonScript : MonoBehaviour {
 		GameManager.instance.mfuncs.zoom (zoomIn);
 	}
 
+	public void magnetButton(bool toggle)
+	{
+		if (!GameManager.instance.playMode) {
+			GameManager.instance.mfuncs.MagnetToggle (toggle);
+		}
+
+	}
+
+
     public void viewAll()
     {
         GameManager.instance.mfuncs.viewAll();
@@ -111,4 +120,6 @@ public class ButtonScript : MonoBehaviour {
 		}
 		GameManager.instance.mfuncs.playCreateModeSwitch();
 	}
+
+
 }
