@@ -5,7 +5,7 @@ using UnityEngine;
 public class Parameters : MonoBehaviour {
 
 	public int maxDragSpeed = 20;
-	public int forceMultiplier = 5;
+	public int forceMultiplier = 360;
 	public int zoomSpeed = 30;
 	public float velocityClamp = 10;
     public float layerThickness = 0.025f;

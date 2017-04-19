@@ -12,6 +12,8 @@ public class LShape : MonoBehaviour {
 	public Color glowColor;
 	public bool selected;
 
+	public List<GameObject> allMagnets;
+
 	public GameObject northOne;
 	public GameObject northTwo;
 	public GameObject northThree;
