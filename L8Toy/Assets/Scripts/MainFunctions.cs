@@ -162,11 +162,11 @@ public class MainFunctions : MonoBehaviour {
 	{
 			GameObject obj = magnet.GetComponent<Magnet>().connection;
 
-		magnet.GetComponent<HingeJoint> ().connectedBody = magnet.GetComponent<JointChecker> ().partnerJoint.GetComponent<Rigidbody>();
-		obj.GetComponent<HingeJoint> ().connectedBody = obj.GetComponent<JointChecker> ().partnerJoint.GetComponent<Rigidbody>();
+		magnet.GetComponent<HingeJoint> ().connectedBody = magnet.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Rigidbody>();
+		obj.GetComponent<HingeJoint> ().connectedBody = obj.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Rigidbody>();
 			
-		magnet.GetComponent<Magnet>().connection = magnet.GetComponent<JointChecker> ().partnerJoint;
-		obj.GetComponent<Magnet>().connection = obj.GetComponent<JointChecker> ().partnerJoint;
+		magnet.GetComponent<Magnet>().connection = magnet.GetComponent<PartnerJoint> ().partnerJoint;
+		obj.GetComponent<Magnet>().connection = obj.GetComponent<PartnerJoint> ().partnerJoint;
 		
 			foreach (SubConfig config in GameManager.instance.config.subconfigs) {
 				

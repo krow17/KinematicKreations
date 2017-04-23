@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class JointChecker : MonoBehaviour {
 
-	public GameObject partnerJoint;
-
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "contact")

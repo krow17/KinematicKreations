@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class SubConfig {
+
+	public List<GameObject> temp = new List<GameObject> ();
 
 	public List<GameObject> subconfiguration = new List<GameObject>();
 
@@ -118,10 +121,20 @@ public class SubConfig {
 
 	public void Merge(SubConfig con1){
 		
-		foreach (GameObject c in con1.subconfiguration) {
-			subconfiguration.Add (c);
+		foreach (GameObject c in con1.subconfiguration) 
+		{
+			if (!subconfiguration.Contains (c))
+			{
+				subconfiguration.Add(c);
+			}
 		}
 		GameManager.instance.config.subconfigs.Remove (con1);
+
 	}
 
+	List<GameObject> removeDuplicates()
+	{
+		temp = subconfiguration.Distinct ().ToList ();
+		return temp;
+	}
 }
