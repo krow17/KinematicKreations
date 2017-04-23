@@ -85,12 +85,16 @@ public class MainFunctions : MonoBehaviour {
 		unselectAllPieces();
 		piece.GetComponent<LShape> ().selected = true;
 		GameManager.instance.config.currentSelection = piece;
+		GameObject.Find ("Buttons").GetComponent<ButtonList>().addButton.SetActive(false);
+		GameObject.Find ("Buttons").GetComponent<ButtonList>().removeButton.SetActive(true);
 	}
 
 	public void unselectPiece(GameObject piece)
 	{
 		piece.GetComponent<LShape>().selected = false;
 		GameManager.instance.config.currentSelection = null;
+		GameObject.Find ("Buttons").GetComponent<ButtonList>().addButton.SetActive(true);
+		GameObject.Find ("Buttons").GetComponent<ButtonList>().removeButton.SetActive(false);
 	}
 
 	public void unselectAllPieces()

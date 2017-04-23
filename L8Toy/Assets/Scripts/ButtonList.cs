@@ -6,6 +6,9 @@ public class ButtonList : MonoBehaviour {
 
 	public List<GameObject> buttonsToFade;
 
+	public GameObject addButton;
+	public GameObject removeButton;
+
 	// Use this for initialization
 	void Start () {
 		

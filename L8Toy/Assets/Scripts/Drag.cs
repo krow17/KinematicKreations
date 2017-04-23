@@ -11,28 +11,13 @@ public class Drag : MonoBehaviour {
 
 	}
 
-	void OnMouseDown()
-	{
-		//if (Input.touchCount > 0) {
-			//Vector3 temp = Camera.main.ScreenToWorldPoint (Input.GetTouch(0).position);
-			Debug.Log ("here");
-			GetComponent<Rigidbody>().AddForce(new Vector3(1, 0, 0) * 360.0f);
-			Debug.Log (GetComponent<Rigidbody> ().velocity);
-		//}
-
-	}
-
 	void Update(){
-		//if (GameManager.instance.playMode) {
-			//playWith ();
-			//clampVelocity ();
-		//} else {
-			//createWith ();
-		//}
-
-		//move ();
-
-
+		if (GameManager.instance.playMode) {
+			playWith ();
+			clampVelocity ();
+		} else {
+			createWith ();
+		}
 	}
 
 	// CREATE MODE
@@ -43,7 +28,6 @@ public class Drag : MonoBehaviour {
 		if (Input.touchCount > 0) {
 			//ONLY ALLOW FOR SINGLE INPUT
 			if (Input.touchCount == 1) {
-
 				foreach (Touch t in Input.touches) {
 					Ray ray = Camera.main.ScreenPointToRay (t.position);
 
@@ -56,7 +40,6 @@ public class Drag : MonoBehaviour {
 								} else if (hit.collider.tag == "contact") {
 									GameManager.instance.mfuncs.selectPiece (this.gameObject.GetComponent<Magnet> ().LShape);
 								}
-
 								touched = true;
 								previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
 								Debug.Log ("You hit the " + hit.transform.name+ " in Create Mode");
@@ -64,19 +47,8 @@ public class Drag : MonoBehaviour {
 						}
 						break;
 
-					//case TouchPhase.Stationary:
-						//GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-						//break;
-
-					case TouchPhase.Ended:
-						//GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-						//GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-						touched = false;
-						break;
-
-					default:
+					case TouchPhase.Moved:
 						if (touched && tag == "shape") {
-							Debug.Log ("DEFAULT");
 							forceDirection = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
 							Debug.DrawLine (transform.position, forceDirection, Color.red);
 							foreach (GameObject mag in gameObject.GetComponent<LShape>().allMagnets) {
@@ -85,6 +57,18 @@ public class Drag : MonoBehaviour {
 							GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
 							previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
 						}
+						break;
+
+					case TouchPhase.Stationary:
+						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+						break;
+
+					case TouchPhase.Ended:
+						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+						GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+						touched = false;
+						break;
+
 						break;
 					}
 				}

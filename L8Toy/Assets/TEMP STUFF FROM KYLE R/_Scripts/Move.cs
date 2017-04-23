@@ -68,6 +68,7 @@ public class Move : MonoBehaviour {
             Select_Manager.sm.contact_selectecd = true;
         }
 
+		Debug.Log ("here");
      
     }
 

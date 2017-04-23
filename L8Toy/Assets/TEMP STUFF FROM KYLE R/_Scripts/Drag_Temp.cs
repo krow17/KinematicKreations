@@ -39,7 +39,6 @@ public class Drag_Temp : MonoBehaviour
     }
     void OnMouseDown()
     {
-		Debug.Log ("here");
 		GetComponent<Rigidbody>().AddForce(new Vector3(1, 0, 0) * 360.0f);
 		Debug.Log (GetComponent<Rigidbody> ().velocity);
         //screenPoint = Camera.main.WorldToScreenPoint(transform.position);
