@@ -79,6 +79,7 @@ public class MainFunctions : MonoBehaviour {
 
 		foreach(GameObject m in magnets)
 		{
+			if(m.GetComponent<Magnet>().connection != null)
 			removeJoint (m); 
 		}
 		GameManager.instance.config.configuration.Remove(pieceToRemove);
