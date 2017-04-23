@@ -66,6 +66,7 @@ public class MainFunctions : MonoBehaviour {
 			removeJoint (m); 
 		}
 		GameManager.instance.config.configuration.Remove(pieceToRemove);
+		unselectPiece (pieceToRemove);
 		Destroy (pieceToRemove);
 	}
 
