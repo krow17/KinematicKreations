@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
 	public Parameters parameters;
 
 	public bool playMode = false;
+	public bool magnetsActive = true;
 
 	public MainFunctions mfuncs;
 

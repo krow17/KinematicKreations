@@ -220,18 +220,26 @@ public class MainFunctions : MonoBehaviour {
 
 	public void MagnetToggle(bool on){
 		if (on == false) {
-			foreach (GameObject p in GameManager.instance.config.configuration) {
+			GameManager.instance.magnetsActive = false;
+			foreach (GameObject p in GameManager.instance.config.configuration) 
+			{
 				Magnet[] mag = p.GetComponentsInChildren<Magnet> ();
 
-				foreach (Magnet m in mag) {
+				foreach (Magnet m in mag) 
+				{
 					m.GetComponent<CapsuleCollider> ().enabled = false; //NOTE: MAKE CAPSULE COLLIDERS FOR MAGNETS
 				}
 			}
-		} else {
-			foreach (GameObject p in GameManager.instance.config.configuration) {
+		}
+		else 
+		{
+			GameManager.instance.magnetsActive = true;
+			foreach (GameObject p in GameManager.instance.config.configuration) 
+			{
 				Magnet[] mag = p.GetComponentsInChildren<Magnet> ();
 
-				foreach (Magnet m in mag) {
+				foreach (Magnet m in mag) 
+				{
 					m.GetComponent<CapsuleCollider> ().enabled = true;
 				}
 			}
