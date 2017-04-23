@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class TouchManager : MonoBehaviour {
 
+	public GameObject grabbedObjectOne;
+	public GameObject grabbedObjectTwo;
 
 	public Vector3 touchPosition;
+	public Vector3 touch;
 	public Vector3 offset;
 	public Vector3 forceDirection;
+	public Rect rayLimit;
 
 	void Update(){
+		rayLimit = new Rect (Screen.width - Screen.width * (1 - Camera.main.transform.GetComponent<Camera> ().rect.min.x), 0, Screen.width * Camera.main.rect.width, Screen.height);
+		//Debug.Log (rayLimit);
+
 		if (GameManager.instance.playMode) {
 			//playWith ();
 			clampVelocity ();
@@ -23,74 +30,89 @@ public class TouchManager : MonoBehaviour {
 	{
 		RaycastHit hit;
 
-		if (Input.touchCount > 0) {
+		if (Input.touchCount > 0)
+		{
 			//ONLY ALLOW FOR SINGLE INPUT
-			if (Input.touchCount == 1) 
+			if (Input.touchCount == 1)
 			{
-				foreach (Touch t in Input.touches) 
-				{
-					Ray ray = Camera.main.ScreenPointToRay (t.position);
-					touchPosition = new Vector3(t.position.x/Screen.width, t.position.y/Screen.height, 0);
-
-					switch (t.phase) 
+				foreach (Touch t in Input.touches)
+				{ 
+					if (rayLimit.Contains (t.position))
 					{
-					//SELECTION
-					case TouchPhase.Began:
-						if (Physics.Raycast (ray, out hit))
+						Ray ray = Camera.main.ScreenPointToRay (t.position);
+						touchPosition = t.position;
+
+						switch (t.phase)
 						{
-							Debug.Log ("initial touch");
-							if (hit.transform.tag == "shape")
+						//SELECTION
+						case TouchPhase.Began:
+							if (Physics.Raycast (ray, out hit))
 							{
-								GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject);
-								GameManager.instance.config.currentSelection.GetComponent<LShape>().touched = true;
-								offset = GameManager.instance.config.currentSelection.transform.position - Camera.main.ScreenToWorldPoint(touchPosition);
-							} else if (hit.collider.tag == "contact")
+								Debug.Log ("initial touch");
+								if (hit.transform.tag == "shape")
+								{
+									GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject);
+									grabbedObjectOne = GameManager.instance.config.currentSelection;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+									offset = grabbedObjectOne.transform.position - touch;
+								} else if (hit.collider.tag == "contact")
+								{
+									GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
+									grabbedObjectOne = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+									offset = grabbedObjectOne.transform.position - touch;
+								}
+							} else
 							{
-								GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
-								GameManager.instance.config.currentSelection.GetComponent<LShape>().touched = true;
+								GameManager.instance.mfuncs.unselectAllPieces ();
 							}
-						} 
-						else
-						{
-							GameManager.instance.mfuncs.unselectAllPieces ();
-						}
-						break;
+							break;
 
-					//MOVE L PIECE
-					case TouchPhase.Moved:
-						if (GameManager.instance.config.currentSelection != null)
-						{
-							if (GameManager.instance.config.currentSelection.GetComponent<LShape>().touched && GameManager.instance.config.currentSelection.tag == "shape") 
+						//MOVE L PIECE
+						case TouchPhase.Moved:
+							if (GameManager.instance.config.currentSelection != null)
 							{
-								forceDirection = (touchPosition + offset) - GameManager.instance.config.currentSelection.transform.position;
-								Debug.DrawLine (GameManager.instance.config.currentSelection.transform.position, forceDirection, Color.red);
-								GameManager.instance.config.currentSelection.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
+								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
+								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
 							}
-						}
-						break;
+							break;
 
-					case TouchPhase.Stationary:
-						if (GameManager.instance.config.currentSelection != null)
-						{
-							if (GameManager.instance.config.currentSelection.GetComponent<LShape>().touched && GameManager.instance.config.currentSelection.tag == "shape")
+						case TouchPhase.Stationary:
+							if (GameManager.instance.config.currentSelection != null)
 							{
-								GameManager.instance.config.currentSelection.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
+								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
+								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
 							}
-						}
-						break;
+							break;
 
-					case TouchPhase.Ended:
-						foreach (GameObject L in GameManager.instance.config.configuration)
-						{
-							L.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-							L.GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
-							L.GetComponent<LShape> ().touched = false;
-						}
-						break;
+						case TouchPhase.Ended:
+							foreach (GameObject L in GameManager.instance.config.configuration)
+							{
+								L.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+								L.GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
+							}
+							break;
 
-						break;
+							break;
+						}
+					} else
+					{
+						
 					}
+
 				}
+			}
+		}
+		else
+		{
+			foreach (GameObject L in GameManager.instance.config.configuration)
+			{
+				L.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
+				L.GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
 			}
 		}
 	}

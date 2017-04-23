@@ -23,8 +23,6 @@ public class LShape : MonoBehaviour {
 
 	public float highlightTimer;
 
-	public bool touched = false;
-
 	void Start () {
 
 		highlightTimer = 0;
