@@ -5,13 +5,21 @@ using UnityEngine;
 public class MainFunctions : MonoBehaviour {
 
     public GameObject LPiece;
-
+    public List<Vector3> SpawnLocations;
 	//Use this to add all the main functions we will call.
 
 
 	// Use this for initialization
 	void Start () {
-
+	
+		SpawnLocations.Add(new Vector3 (0, 0, 0));
+		SpawnLocations.Add(new Vector3 (-.7f, 0, -1.3f));
+		SpawnLocations.Add(new Vector3 (-.7f, 0, 2f));
+		SpawnLocations.Add(new Vector3 (1.6f, 0, -1.3f));
+		SpawnLocations.Add(new Vector3 (1.6f, 0, 2f));
+		SpawnLocations.Add(new Vector3 (2.1f, 0, -1.3f));
+		SpawnLocations.Add(new Vector3 (2.1f, 0, 2f));
+		SpawnLocations.Add(new Vector3 (-1f, 0, 2f));
 	}
 
 	public void playCreateModeSwitch()
@@ -31,19 +39,26 @@ public class MainFunctions : MonoBehaviour {
 
 	public void addPiece()
 	{
-		Debug.Log ("clicked");
+			Debug.Log ("clicked");
 		if (GameManager.instance.config.numberOfPieces < 8)
 		{
-			GameObject tempL = Instantiate (LPiece, Vector3.zero, Quaternion.identity);
-			GameManager.instance.config.addPiece(tempL);
-			//NOTE: NEED TO DD TO OWN SUBCONFIG
-			selectPiece (tempL);
+			float radius = .1f;
+			foreach (Vector3 pos in SpawnLocations) {
+				if (!Physics.CheckSphere (pos, radius)) {
+					GameObject tempL = Instantiate (LPiece, pos, Quaternion.identity);
+					GameManager.instance.config.addPiece(tempL);
+					break;
+				}
+			}
+		
+
 			MagnetToggle (true);
 		} 
 		else 
 		{
 			Debug.Log ("Limit of pieces reached");
 		}
+
 
 
 		//instantiate piece and add it to the correct files
