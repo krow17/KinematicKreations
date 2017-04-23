@@ -122,59 +122,47 @@ public class MainFunctions : MonoBehaviour {
 
 	public void addJoint(GameObject magnetOne, GameObject magnetTwo)
 	{
-		if (magnetOne.GetComponent<Magnet>().connection == null && magnetTwo.GetComponent<Magnet>().connection == null) {
-			if (magnetOne.GetComponent<Magnet>().pole != magnetTwo.GetComponent<Magnet>().pole)
+
+		if (magnetOne.GetComponent<Magnet>().pole != magnetTwo.GetComponent<Magnet>().pole)
+		{
+			magnetOne.GetComponent<Magnet>().connection = magnetTwo;
+
+
+			magnetOne.GetComponent<HingeJoint> ().connectedBody = magnetTwo.GetComponent<Rigidbody> ();
+
+			foreach(SubConfig sc in GameManager.instance.config.subconfigs)
 			{
-				magnetOne.GetComponent<Magnet>().connection = magnetTwo;
-				magnetTwo.GetComponent<Magnet>().connection = magnetOne;
-
-				magnetOne.AddComponent<HingeJoint>();
-				magnetOne.GetComponent<HingeJoint>().axis = new Vector3(0,10,0);
-
-				magnetTwo.AddComponent<HingeJoint>();
-				magnetTwo.GetComponent<HingeJoint>().axis = new Vector3(0,10,0);
-
-
-				magnetOne.GetComponent<HingeJoint> ().connectedBody = magnetTwo.GetComponent<Rigidbody> ();
-				magnetTwo.GetComponent<HingeJoint> ().connectedBody = magnetOne.GetComponent<Rigidbody> ();
-
-                foreach(SubConfig sc in GameManager.instance.config.subconfigs)
-                {
-                    if (sc.subconfiguration.Contains(magnetOne.GetComponent<Magnet>().LShape))
-                    {
-                        foreach (SubConfig sc2 in GameManager.instance.config.subconfigs)
-                        {
-                            if (sc2.subconfiguration.Contains(magnetTwo.GetComponent<Magnet>().LShape))
-                            {
-                                sc.Merge(sc2);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-
-				//magnetOne.GetComponentInParent<HingeJoint> ().connectedBody = magnetTwo.GetComponentInParent<Rigidbody> ();
-				//magnetTwo.GetComponentInParent<HingeJoint> ().connectedBody = magnetOne.GetComponentInParent<Rigidbody> ();
-
+				if (sc.subconfiguration.Contains(magnetOne.GetComponent<Magnet>().LShape))
+				{
+					foreach (SubConfig sc2 in GameManager.instance.config.subconfigs)
+					{
+						if (sc2.subconfiguration.Contains(magnetTwo.GetComponent<Magnet>().LShape))
+						{
+							sc.Merge(sc2);
+							break;
+						}
+					}
+					break;
+				}
 			}
+
+			//magnetOne.GetComponentInParent<HingeJoint> ().connectedBody = magnetTwo.GetComponentInParent<Rigidbody> ();
+			//magnetTwo.GetComponentInParent<HingeJoint> ().connectedBody = magnetOne.GetComponentInParent<Rigidbody> ();
+
 		}
+
 
 
 	}
 
+
 	public void removeJoint(GameObject magnet)
 	{
-		if (magnet.GetComponent<Magnet>().connection != null) {
-
 			GameObject obj = magnet.GetComponent<Magnet>().connection;
 
-			magnet.GetComponent<HingeJoint>().connectedBody = null;
-			obj.GetComponent<HingeJoint>().connectedBody = null;
-
-			obj.GetComponent<Magnet>().connection = null;
-			magnet.GetComponent<Magnet>().connection = null;
-
+		magnet.GetComponent<HingeJoint> ().connectedBody = magnet.GetComponent<JointChecker> ().partnerJoint.GetComponent<Rigidbody>();
+		obj.GetComponent<HingeJoint> ().connectedBody = obj.GetComponent<JointChecker> ().partnerJoint.GetComponent<Rigidbody>();
+			
 			foreach (SubConfig config in GameManager.instance.config.subconfigs) {
 				
 				if (config.subconfiguration.Contains (obj.GetComponent<Magnet> ().LShape)) {
@@ -183,7 +171,7 @@ public class MainFunctions : MonoBehaviour {
 				}
 			}
 				
-		}
+	
 	}
 
 	public void zoom(bool zoomIn)
