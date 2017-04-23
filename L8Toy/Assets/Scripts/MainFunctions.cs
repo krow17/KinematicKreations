@@ -270,6 +270,14 @@ public class MainFunctions : MonoBehaviour {
 		}
 	}
 
+    public void DestroyJoint(bool canDestroy)
+    {
+        if (canDestroy)
+        {
+            GameManager.instance.destroyJoint = true;
+        }
+    }
+
 
 
 	// Update is called once per frame

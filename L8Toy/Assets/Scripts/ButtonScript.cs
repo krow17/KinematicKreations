@@ -106,6 +106,17 @@ public class ButtonScript : MonoBehaviour {
 
 	}
 
+    public void jointButton()
+    {
+        if(!GameManager.instance.playMode)
+        {
+            if (GameManager.instance.destroyJoint)
+                GameManager.instance.mfuncs.DestroyJoint(false);
+            else
+                GameManager.instance.mfuncs.DestroyJoint(true);
+        }
+    }
+
 
     public void viewAll()
     {

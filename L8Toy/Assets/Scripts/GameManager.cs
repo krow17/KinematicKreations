@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour {
 	public bool playMode = false;
 	public bool magnetsActive = true;
 
+    public bool destroyJoint = false;
+
 	public MainFunctions mfuncs;
 
 	void Awake () {
