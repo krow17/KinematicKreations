@@ -127,9 +127,10 @@ public class MainFunctions : MonoBehaviour {
 		if (magnetOne.GetComponent<Magnet>().pole != magnetTwo.GetComponent<Magnet>().pole)
 		{
 			magnetOne.GetComponent<Magnet>().connection = magnetTwo;
-
+			magnetTwo.GetComponent<Magnet>().connection = magnetOne;
 
 			magnetOne.GetComponent<HingeJoint> ().connectedBody = magnetTwo.GetComponent<Rigidbody> ();
+			magnetTwo.GetComponent<HingeJoint> ().connectedBody = magnetOne.GetComponent<Rigidbody> ();
 
 			foreach(SubConfig sc in GameManager.instance.config.subconfigs)
 			{
