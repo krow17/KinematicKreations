@@ -39,10 +39,12 @@ public class Drag : MonoBehaviour {
 									GameManager.instance.mfuncs.selectPiece (this.gameObject);
 								} else if (hit.collider.tag == "contact") {
 									GameManager.instance.mfuncs.selectPiece (this.gameObject.GetComponent<Magnet> ().LShape);
-								}
+								} 
 								touched = true;
 								previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
 								Debug.Log ("You hit the " + hit.transform.name+ " in Create Mode");
+							} else {
+								GameManager.instance.mfuncs.unselectAllPieces ();
 							}
 						}
 						break;

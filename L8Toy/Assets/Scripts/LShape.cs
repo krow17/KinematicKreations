@@ -10,7 +10,7 @@ public class LShape : MonoBehaviour {
 	public int layer;
 	public Colors color;
 	public Color glowColor;
-	public bool selected;
+	public bool selected = false;
 
 	public List<GameObject> allMagnets;
 
@@ -22,6 +22,8 @@ public class LShape : MonoBehaviour {
 	public GameObject southThree;
 
 	public float highlightTimer;
+
+	public bool touched = false;
 
 	void Start () {
 
