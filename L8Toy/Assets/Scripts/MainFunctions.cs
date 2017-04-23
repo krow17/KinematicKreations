@@ -47,6 +47,7 @@ public class MainFunctions : MonoBehaviour {
 				if (!Physics.CheckSphere (pos, radius)) {
 					GameObject tempL = Instantiate (LPiece, pos, Quaternion.identity);
 					GameManager.instance.config.addPiece(tempL);
+					selectPiece (tempL);
 					break;
 				}
 			}
