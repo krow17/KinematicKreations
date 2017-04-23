@@ -163,6 +163,9 @@ public class MainFunctions : MonoBehaviour {
 		magnet.GetComponent<HingeJoint> ().connectedBody = magnet.GetComponent<JointChecker> ().partnerJoint.GetComponent<Rigidbody>();
 		obj.GetComponent<HingeJoint> ().connectedBody = obj.GetComponent<JointChecker> ().partnerJoint.GetComponent<Rigidbody>();
 			
+		magnet.GetComponent<Magnet>().connection = magnet.GetComponent<JointChecker> ().partnerJoint;
+		obj.GetComponent<Magnet>().connection = obj.GetComponent<JointChecker> ().partnerJoint;
+		
 			foreach (SubConfig config in GameManager.instance.config.subconfigs) {
 				
 				if (config.subconfiguration.Contains (obj.GetComponent<Magnet> ().LShape)) {
