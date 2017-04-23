@@ -39,7 +39,7 @@ public class LShape : MonoBehaviour {
 		if (val == 3)
 				color = Colors.Red;
 		
-		transform.position = new Vector3 (0, 0, 0);
+		
 	}
 
 	public void changeColor(Colors newColor)
