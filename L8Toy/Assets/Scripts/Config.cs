@@ -23,9 +23,10 @@ public class Config : MonoBehaviour {
 		subconfigs.Add (sc);
 	}
 
-	public void removePiece()
+	public void removePiece(GameObject pieceToRemove)
 	{
-		
+		configuration.Remove(pieceToRemove);
+		numberOfPieces--;
 	}
 	
 	// Update is called once per frame

@@ -17,8 +17,8 @@ public class MainFunctions : MonoBehaviour {
 		SpawnLocations.Add(new Vector3 (-.7f, 0, 2f));
 		SpawnLocations.Add(new Vector3 (1.6f, 0, -1.3f));
 		SpawnLocations.Add(new Vector3 (1.6f, 0, 2f));
-		SpawnLocations.Add(new Vector3 (2.1f, 0, -1.3f));
-		SpawnLocations.Add(new Vector3 (2.1f, 0, 2f));
+		SpawnLocations.Add(new Vector3 (2.6f, 0, -1.3f));
+		SpawnLocations.Add(new Vector3 (2.6f, 0, 2f));
 		SpawnLocations.Add(new Vector3 (-1f, 0, 2f));
 	}
 
@@ -29,20 +29,22 @@ public class MainFunctions : MonoBehaviour {
 			unselectAllPieces();
 			GameManager.instance.playMode = true;
 			MagnetToggle (false);
+			DestroyJoint (false);
 		}
 		else
 		{
 			GameManager.instance.playMode = false;
 			MagnetToggle (true);
+			DestroyJoint (false);
 		}
 	}
 
 	public void addPiece()
 	{
 			Debug.Log ("clicked");
-		if (GameManager.instance.config.numberOfPieces < 8)
+		if (GameManager.instance.config.numberOfPieces < 9)
 		{
-			float radius = .1f;
+			float radius = .2f;
 			foreach (Vector3 pos in SpawnLocations) {
 				if (!Physics.CheckSphere (pos, radius)) {
 					GameObject tempL = Instantiate (LPiece, pos, Quaternion.identity);
@@ -82,7 +84,7 @@ public class MainFunctions : MonoBehaviour {
 			if(m.GetComponent<Magnet>().connection != null)
 			removeJoint (m); 
 		}
-		GameManager.instance.config.configuration.Remove(pieceToRemove);
+		GameManager.instance.config.removePiece (pieceToRemove);
 		unselectPiece (pieceToRemove);
 		foreach (SubConfig SC in GameManager.instance.config.subconfigs)
 		{
@@ -272,10 +274,14 @@ public class MainFunctions : MonoBehaviour {
 
     public void DestroyJoint(bool canDestroy)
     {
-        if (canDestroy)
-        {
-            GameManager.instance.destroyJoint = true;
-        }
+		if (canDestroy)
+		{
+			GameManager.instance.destroyJoint = true;
+		} 
+		else
+		{
+			GameManager.instance.destroyJoint = false;
+		}
     }
 
 

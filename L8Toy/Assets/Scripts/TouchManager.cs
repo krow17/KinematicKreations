@@ -70,7 +70,8 @@ public class TouchManager : MonoBehaviour {
 										grabbedObjectOne = hit.transform.gameObject;
 										touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
 										offset = grabbedObjectOne.transform.position - touch;
-										// REMOVE JOINT HERE!!!
+										GameManager.instance.mfuncs.removeJoint(grabbedObjectOne.GetComponent<PartnerJoint>().partnerJoint);
+										GameManager.instance.mfuncs.DestroyJoint (false);
 									}
 								}
 							} 
