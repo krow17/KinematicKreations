@@ -18,8 +18,8 @@ public class TouchManager : MonoBehaviour {
 		//Debug.Log (rayLimit);
 
 		if (GameManager.instance.playMode) {
-			//playWith ();
-			clampVelocity ();
+			playWith ();
+			//clampVelocity ();
 		} else {
 			createWith ();
 		}
@@ -48,21 +48,33 @@ public class TouchManager : MonoBehaviour {
 						case TouchPhase.Began:
 							if (Physics.Raycast (ray, out hit))
 							{
-								Debug.Log ("initial touch");
 								if (hit.transform.tag == "shape")
 								{
 									GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject);
 									grabbedObjectOne = GameManager.instance.config.currentSelection;
 									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
 									offset = grabbedObjectOne.transform.position - touch;
-								} else if (hit.collider.tag == "contact")
+								} 
+								else if (hit.collider.tag == "contact")
 								{
-									GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
-									grabbedObjectOne = hit.transform.gameObject;
-									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
-									offset = grabbedObjectOne.transform.position - touch;
+									if (!GameManager.instance.destroyJoint)
+									{
+										GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
+										grabbedObjectOne = hit.transform.gameObject;
+										touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+										offset = grabbedObjectOne.transform.position - touch;
+									}
+									else
+									{
+										GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
+										grabbedObjectOne = hit.transform.gameObject;
+										touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+										offset = grabbedObjectOne.transform.position - touch;
+										// REMOVE JOINT HERE!!!
+									}
 								}
-							} else
+							} 
+							else
 							{
 								GameManager.instance.mfuncs.unselectAllPieces ();
 							}
@@ -96,8 +108,6 @@ public class TouchManager : MonoBehaviour {
 								L.GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
 							}
 							break;
-
-							break;
 						}
 					} else
 					{
@@ -117,112 +127,249 @@ public class TouchManager : MonoBehaviour {
 		}
 	}
 
-//	void playWith()
-//	{
-//		RaycastHit hit;
-//
-//		if (Input.touchCount > 0)
-//		{
-//			if (Input.touchCount  == 2) {
-//
-//				foreach (Touch t in Input.touches) {
-//					Ray ray = Camera.main.ScreenPointToRay (t.position);
-//
-//					switch (t.phase) {
-//					case TouchPhase.Began:
-//						if (Physics.Raycast (ray, out hit)) {
-//							if (hit.collider == transform.GetComponent<Collider> ()) {
-//								touched = true;
-//								previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
-//								Debug.Log ("You hit the2 " + hit.transform.name);
-//							}
-//						}
-//						break;
-//
-//					case TouchPhase.Stationary:
-//						GetComponent<Rigidbody>().velocity = new Vector3 (0, 0, 0);
-//						break;
-//					case TouchPhase.Moved:
-//						if (touched) {
-//							forceDirection = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
-//							Debug.DrawLine (transform.position, forceDirection, Color.red);
-//							transform.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
-//							previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
-//						}
-//						break;
-//
-//					case TouchPhase.Ended:
-//						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-//						//GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-//						touched = false;
-//						break;
-//					}
-//				}
-//			}
-//			else if (Input.touchCount == 1)
-//			{
-//				foreach (Touch t in Input.touches) {
-//					Ray ray = Camera.main.ScreenPointToRay (t.position);
-//
-//					switch (t.phase) {
-//					case TouchPhase.Began:
-//						if (Physics.Raycast (ray, out hit)) {
-//							if (hit.collider == transform.GetComponent<Collider> ()) {
-//								touched = true;
-//								previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
-//								Debug.Log ("You hit the " + hit.transform.name + " in Play Mode");
-//							}
-//						}
-//						break;
-//
-//					case TouchPhase.Stationary:
-//						GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-//						GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
-//						break;
-//					case TouchPhase.Moved:
-//						if (touched) {
-//							//forceDirection = new Vector3(t.position.x ,0 , t.position.y) - previousPosition;
-//							forceDirection = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
-//							Debug.DrawLine (transform.position, forceDirection, Color.red);
-//							Debug.Log ("here");
-//							foreach (GameObject L in GameManager.instance.config.configuration)
-//							{
-//								L.transform.GetComponent<Rigidbody>().AddForce(forceDirection * GameManager.instance.parameters.forceMultiplier);
-//							}
-//							previousPosition = new Vector3 (t.deltaPosition.x, 0, t.deltaPosition.y);
-//						}
-//						break;
-//
-//					case TouchPhase.Ended:
-//						foreach (GameObject L in GameManager.instance.config.configuration)
-//						{
-//							GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-//							GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-//						}
-//						touched = false;
-//						break;
-//					}
-//				}
-//			}
-//			else
-//			{
-//				GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-//				GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-//			}
-//		}
-//		else
-//		{
-//			GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-//			GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
-//		}
-//	}
-
-	void clampVelocity()
+	void playWith()
 	{
-		if (transform.GetComponent<Rigidbody> ().velocity.magnitude > GameManager.instance.parameters.velocityClamp) {
-			Vector3 currentVelocity = transform.GetComponent<Rigidbody> ().velocity;
-			Vector3 clampedVelocity = Vector3.ClampMagnitude (currentVelocity, GameManager.instance.parameters.velocityClamp);
-			transform.GetComponent<Rigidbody> ().velocity.Set (clampedVelocity.x, clampedVelocity.y, clampedVelocity.z);
+		RaycastHit hit;
+
+		if (Input.touchCount > 0)
+		{
+			if (Input.touchCount  == 2) {
+
+				foreach (Touch t in Input.touches) {
+
+					Debug.Log (t.fingerId);
+
+					Ray ray = Camera.main.ScreenPointToRay (t.position);
+					touchPosition = t.position;
+
+					switch (t.phase) {
+					case TouchPhase.Began:
+						if (Physics.Raycast (ray, out hit)) {
+							if (t.fingerId == 0)
+							{
+								if (hit.transform.tag == "shape")
+								{
+									grabbedObjectOne = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+									offset = grabbedObjectOne.transform.position - touch;
+								} 
+								else if (hit.collider.tag == "contact")
+								{
+									grabbedObjectOne = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+									offset = grabbedObjectOne.transform.position - touch;
+								}
+							}
+							else if (t.fingerId == 1)
+							{
+								if (hit.transform.tag == "shape")
+								{
+									grabbedObjectTwo = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+									offset = grabbedObjectTwo.transform.position - touch;
+								} 
+								else if (hit.collider.tag == "contact")
+								{
+									grabbedObjectTwo = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+									offset = grabbedObjectTwo.transform.position - touch;
+								}
+							}
+						}
+						break;
+
+					case TouchPhase.Moved:
+						if (t.fingerId == 0)
+						{
+							if (grabbedObjectOne != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
+								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
+								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						} else if (t.fingerId == 1)
+						{
+							if (grabbedObjectTwo != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectTwo.transform.position;
+								Debug.DrawLine (grabbedObjectTwo.transform.position, forceDirection, Color.green);
+								grabbedObjectTwo.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						}
+						break;
+
+					case TouchPhase.Stationary:
+						if (t.fingerId == 0)
+						{
+							if (grabbedObjectOne != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
+								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
+								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						} else if (t.fingerId == 1)
+						{
+							if (grabbedObjectTwo != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectTwo.transform.position;
+								Debug.DrawLine (grabbedObjectTwo.transform.position, forceDirection, Color.green);
+								grabbedObjectTwo.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						}
+						break;
+
+					case TouchPhase.Ended:
+						if (t.fingerId == 0)
+						{
+							grabbedObjectOne = null;
+						} 
+						else if (t.fingerId == 1)
+						{
+							grabbedObjectTwo = null;
+						}
+						break;
+					}
+				}
+			}
+			else if (Input.touchCount == 1)
+			{
+				foreach (Touch t in Input.touches) {
+
+					Debug.Log (t.fingerId);
+
+					Ray ray = Camera.main.ScreenPointToRay (t.position);
+					touchPosition = t.position;
+
+					switch (t.phase) {
+					case TouchPhase.Began:
+						if (Physics.Raycast (ray, out hit)) {
+							if (t.fingerId == 0)
+							{
+								if (hit.transform.tag == "shape")
+								{
+									grabbedObjectOne = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+									offset = grabbedObjectOne.transform.position - touch;
+								} 
+								else if (hit.collider.tag == "contact")
+								{
+									grabbedObjectOne = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+									offset = grabbedObjectOne.transform.position - touch;
+								}
+							}
+							else if (t.fingerId == 1)
+							{
+								if (hit.transform.tag == "shape")
+								{
+									grabbedObjectTwo = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+									offset = grabbedObjectTwo.transform.position - touch;
+								} 
+								else if (hit.collider.tag == "contact")
+								{
+									grabbedObjectTwo = hit.transform.gameObject;
+									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+									offset = grabbedObjectTwo.transform.position - touch;
+								}
+							}
+						}
+						break;
+
+					case TouchPhase.Moved:
+						if (t.fingerId == 0)
+						{
+							if (grabbedObjectOne != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
+								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
+								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						} else if (t.fingerId == 1)
+						{
+							if (grabbedObjectTwo != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectTwo.transform.position;
+								Debug.DrawLine (grabbedObjectTwo.transform.position, forceDirection, Color.green);
+								grabbedObjectTwo.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						}
+						break;
+
+					case TouchPhase.Stationary:
+						if (t.fingerId == 0)
+						{
+							if (grabbedObjectOne != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
+								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
+								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						} else if (t.fingerId == 1)
+						{
+							if (grabbedObjectTwo != null)
+							{
+								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
+								forceDirection = (touch + offset) - grabbedObjectTwo.transform.position;
+								Debug.DrawLine (grabbedObjectTwo.transform.position, forceDirection, Color.green);
+								grabbedObjectTwo.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
+							}
+							break;
+						}
+						break;
+
+					case TouchPhase.Ended:
+						if (t.fingerId == 0)
+						{
+							grabbedObjectOne = null;
+						} 
+						else if (t.fingerId == 1)
+						{
+							grabbedObjectTwo = null;
+						}
+						break;
+					}
+				}
+			}
+			else
+			{
+				foreach (GameObject L in GameManager.instance.config.configuration)
+				{
+					L.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+					L.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+				}
+			}
+		}
+		else
+		{
+			foreach (GameObject L in GameManager.instance.config.configuration)
+			{
+				L.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+				L.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+			}
 		}
 	}
+
+//	void clampVelocity()
+//	{
+//		if (transform.GetComponent<Rigidbody> ().velocity.magnitude > GameManager.instance.parameters.velocityClamp) {
+//			Vector3 currentVelocity = transform.GetComponent<Rigidbody> ().velocity;
+//			Vector3 clampedVelocity = Vector3.ClampMagnitude (currentVelocity, GameManager.instance.parameters.velocityClamp);
+//			transform.GetComponent<Rigidbody> ().velocity.Set (clampedVelocity.x, clampedVelocity.y, clampedVelocity.z);
+//		}
+//	}
 }
