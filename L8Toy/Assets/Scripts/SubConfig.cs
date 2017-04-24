@@ -124,15 +124,18 @@ public class SubConfig {
 
 
 	public void Merge(SubConfig con1){
-		
-		foreach (GameObject c in con1.subconfiguration) 
+
+		if (this != con1)
 		{
-			if (!subconfiguration.Contains (c))
+			foreach (GameObject c in con1.subconfiguration) 
 			{
-				subconfiguration.Add(c);
+				if (!subconfiguration.Contains (c))
+				{
+					subconfiguration.Add(c);
+				}
 			}
+			GameManager.instance.config.subconfigs.Remove (con1);
 		}
-		GameManager.instance.config.subconfigs.Remove (con1);
 	}
 		
 }
