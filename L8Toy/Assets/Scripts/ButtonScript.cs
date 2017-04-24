@@ -19,11 +19,16 @@ public class ButtonScript : MonoBehaviour {
 
 	public void addRemoveButton(bool addL)
 	{
-		if (!GameManager.instance.playMode) {
-			if (addL) {
+		if (!GameManager.instance.playMode) 
+		{
+			if (addL) 
+			{
 				GameManager.instance.mfuncs.addPiece();
-			} else {
-				if (GameManager.instance.config.currentSelection != null) {
+			}
+			else 
+			{
+				if (GameManager.instance.config.currentSelection != null) 
+				{
 					GameManager.instance.mfuncs.removePiece (GameManager.instance.config.currentSelection);
 				}
 			}
