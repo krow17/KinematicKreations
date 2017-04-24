@@ -84,7 +84,16 @@ public class MainFunctions : MonoBehaviour {
 		}
 		GameManager.instance.config.configuration.Remove(pieceToRemove);
 		unselectPiece (pieceToRemove);
+		foreach (SubConfig SC in GameManager.instance.config.subconfigs)
+		{
+			if (SC.subconfiguration.Contains (pieceToRemove))
+			{
+				SC.subconfiguration.Remove (pieceToRemove);
+			}
+		}
 		Destroy (pieceToRemove);
+
+		cleanUpSubconfigs ();
 	}
 
 	public void clear (){
@@ -148,20 +157,13 @@ public class MainFunctions : MonoBehaviour {
 					break;
 				}
 			}
-
-			//magnetOne.GetComponentInParent<HingeJoint> ().connectedBody = magnetTwo.GetComponentInParent<Rigidbody> ();
-			//magnetTwo.GetComponentInParent<HingeJoint> ().connectedBody = magnetOne.GetComponentInParent<Rigidbody> ();
-
 		}
-
-
-
 	}
 
 
 	public void removeJoint(GameObject magnet)
 	{
-			GameObject obj = magnet.GetComponent<Magnet>().connection;
+		GameObject obj = magnet.GetComponent<Magnet>().connection;
 
 		magnet.GetComponent<HingeJoint> ().connectedBody = magnet.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Rigidbody>();
 		obj.GetComponent<HingeJoint> ().connectedBody = obj.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Rigidbody>();
@@ -169,15 +171,30 @@ public class MainFunctions : MonoBehaviour {
 		magnet.GetComponent<Magnet>().connection = magnet.GetComponent<PartnerJoint> ().partnerJoint;
 		obj.GetComponent<Magnet>().connection = obj.GetComponent<PartnerJoint> ().partnerJoint;
 		
-			foreach (SubConfig config in GameManager.instance.config.subconfigs) {
-				
-				if (config.subconfiguration.Contains (obj.GetComponent<Magnet> ().LShape)) {
-					GameManager.instance.config.subconfigs.Add (config.Split ());
-					break;
-				}
+		foreach (SubConfig config in GameManager.instance.config.subconfigs) 
+		{
+			if (config.subconfiguration.Contains (obj.GetComponent<Magnet> ().LShape)) 
+			{
+				GameManager.instance.config.subconfigs.Add (config.Split());
+				break;
 			}
-				
+		}
 	
+	}
+
+	public void cleanUpSubconfigs()
+	{
+		Debug.Log (GameManager.instance.config.subconfigs.Count);
+
+		for (int i = 0; i < GameManager.instance.config.subconfigs.Count; i++)
+		{
+			if (GameManager.instance.config.subconfigs[i].subconfiguration.Count == 0)
+			{
+				Debug.Log (i);
+				GameManager.instance.config.subconfigs.Remove (GameManager.instance.config.subconfigs[i]);
+				break;
+			}
+		}
 	}
 
 	public void zoom(bool zoomIn)

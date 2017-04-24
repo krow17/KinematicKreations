@@ -6,11 +6,11 @@ public class JointChecker : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.tag == "contact")
+		if (other.gameObject.transform.parent != null && other.gameObject.transform.parent.tag == "contact")
 		{
-			if (other.gameObject.GetComponent<Magnet> ().LShape != gameObject.GetComponent<Magnet> ().LShape)
+			if (other.gameObject.transform.parent.GetComponent<Magnet>().LShape != gameObject.transform.parent.GetComponent<Magnet> ().LShape)
 			{
-				GameManager.instance.mfuncs.addJoint (gameObject, other.gameObject);
+				GameManager.instance.mfuncs.addJoint(gameObject.transform.parent.gameObject, other.gameObject.transform.parent.gameObject);
 			}	
 		}
 	}
