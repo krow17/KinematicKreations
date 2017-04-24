@@ -17,8 +17,8 @@ public class MainFunctions : MonoBehaviour {
 		SpawnLocations.Add(new Vector3 (-.7f, 0, 2f));
 		SpawnLocations.Add(new Vector3 (1.6f, 0, -1.3f));
 		SpawnLocations.Add(new Vector3 (1.6f, 0, 2f));
-		SpawnLocations.Add(new Vector3 (2.6f, 0, -1.3f));
-		SpawnLocations.Add(new Vector3 (2.6f, 0, 2f));
+		SpawnLocations.Add(new Vector3 (3, 0, -1.3f));
+		SpawnLocations.Add(new Vector3 (3, 0, 2f));
 		SpawnLocations.Add(new Vector3 (-1f, 0, 2f));
 	}
 

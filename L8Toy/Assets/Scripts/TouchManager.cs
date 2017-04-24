@@ -1,8 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TouchManager : MonoBehaviour {
+
+	public bool touchIndicatorsFound = false;
+
+	public GameObject touchIndicatorOne;
+	public GameObject touchIndicatorTwo;
 
 	public GameObject grabbedObjectOne;
 	public GameObject grabbedObjectTwo;
@@ -15,7 +22,6 @@ public class TouchManager : MonoBehaviour {
 
 	void Update(){
 		rayLimit = new Rect (Screen.width - Screen.width * (1 - Camera.main.transform.GetComponent<Camera> ().rect.min.x), 0, Screen.width * Camera.main.rect.width, Screen.height);
-		//Debug.Log (rayLimit);
 
 		if (GameManager.instance.playMode) {
 			playWith ();
@@ -23,6 +29,20 @@ public class TouchManager : MonoBehaviour {
 		} else {
 			createWith ();
 		}
+
+		if (SceneManager.GetActiveScene ().name == "Main" && !touchIndicatorsFound)
+		{
+			touchIndicatorOne = GameObject.Find("Touch Indicator One");
+			touchIndicatorTwo = GameObject.Find("Touch Indicator Two");
+			touchIndicatorOne.SetActive (false);
+			touchIndicatorTwo.SetActive (false);
+			touchIndicatorsFound = true;
+		} 
+		else if (SceneManager.GetActiveScene ().name != "Main" && touchIndicatorsFound)
+		{
+			touchIndicatorsFound = false;
+		}
+			
 	}
 
 	// CREATE MODE
@@ -145,6 +165,16 @@ public class TouchManager : MonoBehaviour {
 
 					switch (t.phase) {
 					case TouchPhase.Began:
+
+						if (t.fingerId == 0)
+						{
+							touchIndicatorOne.SetActive (true);
+						}
+						else if (t.fingerId == 1)
+						{
+							touchIndicatorTwo.SetActive (true);
+						}
+
 						if (Physics.Raycast (ray, out hit)) {
 							if (t.fingerId == 0)
 							{
@@ -182,6 +212,7 @@ public class TouchManager : MonoBehaviour {
 					case TouchPhase.Moved:
 						if (t.fingerId == 0)
 						{
+							moveIndicator (touchIndicatorOne, t);
 							if (grabbedObjectOne != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
@@ -192,6 +223,7 @@ public class TouchManager : MonoBehaviour {
 							break;
 						} else if (t.fingerId == 1)
 						{
+							moveIndicator (touchIndicatorTwo, t);
 							if (grabbedObjectTwo != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
@@ -206,6 +238,7 @@ public class TouchManager : MonoBehaviour {
 					case TouchPhase.Stationary:
 						if (t.fingerId == 0)
 						{
+							moveIndicator (touchIndicatorOne, t);
 							if (grabbedObjectOne != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
@@ -216,6 +249,7 @@ public class TouchManager : MonoBehaviour {
 							break;
 						} else if (t.fingerId == 1)
 						{
+							moveIndicator (touchIndicatorTwo, t);
 							if (grabbedObjectTwo != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
@@ -230,10 +264,12 @@ public class TouchManager : MonoBehaviour {
 					case TouchPhase.Ended:
 						if (t.fingerId == 0)
 						{
+							touchIndicatorOne.SetActive (false);
 							grabbedObjectOne = null;
 						} 
 						else if (t.fingerId == 1)
 						{
+							touchIndicatorTwo.SetActive (false);
 							grabbedObjectTwo = null;
 						}
 						break;
@@ -251,6 +287,16 @@ public class TouchManager : MonoBehaviour {
 
 					switch (t.phase) {
 					case TouchPhase.Began:
+
+						if (t.fingerId == 0)
+						{
+							touchIndicatorOne.SetActive (true);
+						}
+						else if (t.fingerId == 1)
+						{
+							touchIndicatorTwo.SetActive (true);
+						}
+
 						if (Physics.Raycast (ray, out hit)) {
 							if (t.fingerId == 0)
 							{
@@ -269,6 +315,7 @@ public class TouchManager : MonoBehaviour {
 							}
 							else if (t.fingerId == 1)
 							{
+
 								if (hit.transform.tag == "shape")
 								{
 									grabbedObjectTwo = hit.transform.gameObject;
@@ -288,6 +335,9 @@ public class TouchManager : MonoBehaviour {
 					case TouchPhase.Moved:
 						if (t.fingerId == 0)
 						{
+
+							moveIndicator (touchIndicatorOne, t);
+
 							if (grabbedObjectOne != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
@@ -298,6 +348,8 @@ public class TouchManager : MonoBehaviour {
 							break;
 						} else if (t.fingerId == 1)
 						{
+
+							moveIndicator (touchIndicatorTwo, t);
 							if (grabbedObjectTwo != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
@@ -312,6 +364,7 @@ public class TouchManager : MonoBehaviour {
 					case TouchPhase.Stationary:
 						if (t.fingerId == 0)
 						{
+							moveIndicator (touchIndicatorOne, t);
 							if (grabbedObjectOne != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
@@ -322,6 +375,7 @@ public class TouchManager : MonoBehaviour {
 							break;
 						} else if (t.fingerId == 1)
 						{
+							moveIndicator (touchIndicatorTwo, t);
 							if (grabbedObjectTwo != null)
 							{
 								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectTwo.transform.position.y));
@@ -336,10 +390,12 @@ public class TouchManager : MonoBehaviour {
 					case TouchPhase.Ended:
 						if (t.fingerId == 0)
 						{
+							touchIndicatorOne.SetActive (false);
 							grabbedObjectOne = null;
 						} 
 						else if (t.fingerId == 1)
 						{
+							touchIndicatorTwo.SetActive (true);
 							grabbedObjectTwo = null;
 						}
 						break;
@@ -363,6 +419,13 @@ public class TouchManager : MonoBehaviour {
 				L.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
 			}
 		}
+	}
+
+	void moveIndicator(GameObject indicator, Touch touch)
+	{
+		Debug.Log (Screen.width);
+
+		indicator.transform.localPosition = new Vector3 (touch.position.x - Screen.width/2, touch.position.y - Screen.height/2, 0);
 	}
 
 //	void clampVelocity()
