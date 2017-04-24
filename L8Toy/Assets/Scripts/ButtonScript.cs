@@ -96,10 +96,12 @@ public class ButtonScript : MonoBehaviour {
 		if (!GameManager.instance.playMode) {
 			if (GameManager.instance.magnetsActive)
 			{
+				GetComponent<Image> ().sprite = GameManager.instance.magnetsOffImage;
 				GameManager.instance.mfuncs.MagnetToggle (false);
 			} 
 			else
 			{
+				GetComponent<Image> ().sprite = GameManager.instance.magnetsOnImage;
 				GameManager.instance.mfuncs.MagnetToggle (true);
 			}
 		}
@@ -112,10 +114,12 @@ public class ButtonScript : MonoBehaviour {
         {
 			if (GameManager.instance.destroyJoint)
 			{
+				GetComponent<Image> ().sprite = GameManager.instance.destroyJointsOffImage;
 				GameManager.instance.mfuncs.DestroyJoint(false);
 			} 
 			else
 			{
+				GetComponent<Image> ().sprite = GameManager.instance.destroyJointsOnImage;
 				GameManager.instance.mfuncs.DestroyJoint(true);
 			}
                 

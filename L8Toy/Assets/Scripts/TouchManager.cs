@@ -395,7 +395,7 @@ public class TouchManager : MonoBehaviour {
 						} 
 						else if (t.fingerId == 1)
 						{
-							touchIndicatorTwo.SetActive (true);
+							touchIndicatorTwo.SetActive (false);
 							grabbedObjectTwo = null;
 						}
 						break;
@@ -423,9 +423,7 @@ public class TouchManager : MonoBehaviour {
 
 	void moveIndicator(GameObject indicator, Touch touch)
 	{
-		Debug.Log (Screen.width);
-
-		indicator.transform.localPosition = new Vector3 (touch.position.x - Screen.width/2, touch.position.y - Screen.height/2, 0);
+		indicator.transform.localPosition = new Vector3 (touch.position.x / GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor, touch.position.y / GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor, 0);
 	}
 
 //	void clampVelocity()

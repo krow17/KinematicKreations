@@ -8,7 +8,7 @@ public class Parameters : MonoBehaviour {
 	public int forceMultiplier = 360;
 	public int zoomSpeed = 30;
 	public float velocityClamp = 10;
-    public float layerThickness = 0.025f;
+    public float layerThickness = 0.027f;
     public int layerLimit = 4;
 
 	public Color buttonColor = new Color(1, 1, 1, 1);

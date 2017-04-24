@@ -12,6 +12,9 @@ public class SceneChange : MonoBehaviour {
 
     public void changeScene(string newScene)
     {
+		GameManager.instance.playMode = false;
+		GameManager.instance.magnetsActive = true;
+		GameManager.instance.destroyJoint = false;
         SceneManager.LoadScene(newScene);
     }
 

@@ -14,6 +14,11 @@ public class GameManager : MonoBehaviour {
 	public Sprite createImage;
 	public Sprite addImage;
 	public Sprite removeImage;
+	public Sprite magnetsOnImage;
+	public Sprite magnetsOffImage;
+	public Sprite destroyJointsOnImage;
+	public Sprite destroyJointsOffImage;
+
 
     public static GameManager instance = null;
     public Config config;
