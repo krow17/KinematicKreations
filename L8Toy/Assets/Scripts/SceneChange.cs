@@ -15,6 +15,9 @@ public class SceneChange : MonoBehaviour {
 		GameManager.instance.playMode = false;
 		GameManager.instance.magnetsActive = true;
 		GameManager.instance.destroyJoint = false;
+
+		GameManager.instance.mfuncs.clear ();
+
         SceneManager.LoadScene(newScene);
     }
 
