@@ -6,6 +6,7 @@ public class Config : MonoBehaviour {
 
 	public int numberOfPieces;
 	public GameObject currentSelection;
+	public GameObject groundedJoint = null;
 
 	public List<GameObject> configuration = new List<GameObject> ();
 	public List<SubConfig> subconfigs = new List<SubConfig> ();

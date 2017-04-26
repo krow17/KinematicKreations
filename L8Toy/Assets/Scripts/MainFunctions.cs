@@ -30,12 +30,14 @@ public class MainFunctions : MonoBehaviour {
 			GameManager.instance.playMode = true;
 			MagnetToggle (false);
 			DestroyJoint (false);
+			groundJoint (false);
 		}
 		else
 		{
 			GameManager.instance.playMode = false;
 			MagnetToggle (true);
 			DestroyJoint (false);
+			groundJoint (false);
 		}
 	}
 
@@ -107,6 +109,7 @@ public class MainFunctions : MonoBehaviour {
         GameManager.instance.config.subconfigs.Clear();
         GameManager.instance.config.configuration.Clear();
         GameManager.instance.config.numberOfPieces = 0;
+		GameManager.instance.config.groundedJoint = null;
 	}
 
 	public void selectPiece(GameObject piece)
@@ -283,6 +286,54 @@ public class MainFunctions : MonoBehaviour {
 			GameManager.instance.destroyJoint = false;
 		}
     }
+
+	public void groundJoint(bool canGround)
+	{
+		if (canGround)
+		{
+			GameManager.instance.groundJoint = true;
+		} 
+		else
+		{
+			GameManager.instance.groundJoint = false;
+		}
+	}
+
+	public void connectJointToGround(GameObject jointToGround)
+	{
+		Debug.Log ("connectJointToGround Func");
+
+		if (GameManager.instance.config.groundedJoint == jointToGround.GetComponent<Magnet>().GetComponent<PartnerJoint>().partnerJoint)
+		{
+			Debug.Log ("Unground");
+			//ungroundJoint because already grounded
+			ungroundJoint (GameManager.instance.config.groundedJoint);
+		}
+		else if (jointToGround.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Magnet> ().connection == jointToGround)
+		{
+			Debug.Log ("Ground");
+			//ground it
+			if (GameManager.instance.config.groundedJoint != null)
+			{
+				ungroundJoint(GameManager.instance.config.groundedJoint);
+			}
+			jointToGround.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<HingeJoint> ().connectedBody = null;
+			jointToGround.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Magnet> ().connection = null;
+			GameManager.instance.config.groundedJoint = jointToGround.GetComponent<PartnerJoint> ().partnerJoint;
+		}
+		else
+		{
+			Debug.Log ("Recall");
+			connectJointToGround (jointToGround.GetComponent<PartnerJoint> ().partnerJoint.GetComponent<Magnet> ().connection);
+		}
+	}
+
+	void ungroundJoint(GameObject jointToUnground)
+	{
+		jointToUnground.GetComponent<Magnet> ().connection = jointToUnground.GetComponent<PartnerJoint> ().partnerJoint;
+		jointToUnground.GetComponent<HingeJoint>().connectedBody = jointToUnground.GetComponent<PartnerJoint>().partnerJoint.GetComponent<Rigidbody>();
+		GameManager.instance.config.groundedJoint = null;
+	}
 
 
 

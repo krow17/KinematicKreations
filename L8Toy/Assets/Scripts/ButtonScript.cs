@@ -126,6 +126,12 @@ public class ButtonScript : MonoBehaviour {
 			{
 				GetComponent<Image> ().sprite = GameManager.instance.destroyJointsOnImage;
 				GameManager.instance.mfuncs.DestroyJoint(true);
+
+				if (GameManager.instance.groundJoint)
+				{
+					GameObject.Find("Joint Ground Button").GetComponent<Image> ().sprite = GameManager.instance.groundJointOffImage;
+					GameManager.instance.mfuncs.groundJoint(false);
+				}
 			}
                 
         }
@@ -151,6 +157,29 @@ public class ButtonScript : MonoBehaviour {
 			}
 		}
 		GameManager.instance.mfuncs.playCreateModeSwitch();
+	}
+
+	public void groundedButton()
+	{
+		if (!GameManager.instance.playMode)
+		{
+			if (GameManager.instance.groundJoint)
+			{
+				GetComponent<Image>().sprite = GameManager.instance.groundJointOffImage;
+				GameManager.instance.groundJoint = false;
+			}
+			else
+			{
+				GetComponent<Image>().sprite = GameManager.instance.groundJointOnImage;
+				GameManager.instance.groundJoint = true;
+
+				if (GameManager.instance.destroyJoint)
+				{
+					GameObject.Find("Joint Destroy Button").GetComponent<Image> ().sprite = GameManager.instance.destroyJointsOffImage;
+					GameManager.instance.mfuncs.DestroyJoint(false);
+				}
+			}
+		}
 	}
 
 

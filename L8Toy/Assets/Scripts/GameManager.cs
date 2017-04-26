@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour {
 	public Sprite magnetsOffImage;
 	public Sprite destroyJointsOnImage;
 	public Sprite destroyJointsOffImage;
+	public Sprite groundJointOffImage;
+	public Sprite groundJointOnImage;
 
 
     public static GameManager instance = null;
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour {
 	public bool magnetsActive = true;
 
     public bool destroyJoint = false;
+	public bool groundJoint = false;
 
 	public MainFunctions mfuncs;
 
