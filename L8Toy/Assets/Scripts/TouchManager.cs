@@ -456,6 +456,12 @@ public class TouchManager : MonoBehaviour {
 			{
 				L.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
 				L.GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
+
+				foreach (GameObject Magnet in L.GetComponent<LShape>().allMagnets)
+				{
+					Magnet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+					Magnet.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+				}
 			}
 		}
 	}
@@ -716,6 +722,12 @@ public class TouchManager : MonoBehaviour {
 				{
 					L.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
 					L.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+
+					foreach (GameObject Magnet in L.GetComponent<LShape>().allMagnets)
+					{
+						Magnet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+						Magnet.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+					}
 				}
 			}
 		}
@@ -725,6 +737,12 @@ public class TouchManager : MonoBehaviour {
 			{
 				L.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
 				L.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+
+				foreach (GameObject Magnet in L.GetComponent<LShape>().allMagnets)
+				{
+					Magnet.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+					Magnet.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, 0, 0);
+				}
 			}
 		}
 	}
@@ -734,89 +752,3 @@ public class TouchManager : MonoBehaviour {
 		indicator.transform.localPosition = new Vector3 (touch.position.x / GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor, touch.position.y / GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor, 0);
 	}
 }
-
-
-//OLD CODE FOR REFRENCE
-
-//				foreach (Touch t in Input.touches)
-//				{ 
-//					if (rayLimit.Contains (t.position))
-//					{
-//						Ray ray = Camera.main.ScreenPointToRay (t.position);
-//						touchPosition = t.position;
-//
-//						switch (t.phase)
-//						{
-//						//SELECTION
-//						case TouchPhase.Began:
-//							if (Physics.Raycast (ray, out hit))
-//							{
-//								if (hit.transform.tag == "shape")
-//								{
-//									GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject);
-//									grabbedObjectOne = GameManager.instance.config.currentSelection;
-//									touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
-//									offset = grabbedObjectOne.transform.position - touch;
-//								} 
-//								else if (hit.collider.tag == "contact")
-//								{
-//									if (!GameManager.instance.destroyJoint)
-//									{
-//										GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
-//										grabbedObjectOne = hit.transform.gameObject;
-//										touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
-//										offset = grabbedObjectOne.transform.position - touch;
-//									}
-//									else
-//									{
-//										GameManager.instance.mfuncs.selectPiece (hit.transform.gameObject.GetComponent<Magnet> ().LShape);
-//										grabbedObjectOne = hit.transform.gameObject;
-//										touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
-//										offset = grabbedObjectOne.transform.position - touch;
-//										GameManager.instance.mfuncs.removeJoint(grabbedObjectOne.GetComponent<PartnerJoint>().partnerJoint);
-//										GameManager.instance.mfuncs.DestroyJoint (false);
-//									}
-//								}
-//							} 
-//							else
-//							{
-//								GameManager.instance.mfuncs.unselectAllPieces ();
-//							}
-//							break;
-//
-//						//MOVE L PIECE
-//						case TouchPhase.Moved:
-//							if (GameManager.instance.config.currentSelection != null)
-//							{
-//								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
-//								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
-//								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
-//								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
-//							}
-//							break;
-//
-//						case TouchPhase.Stationary:
-//							if (GameManager.instance.config.currentSelection != null)
-//							{
-//								touch = Camera.main.ScreenToWorldPoint (new Vector3 (touchPosition.x, touchPosition.y, Camera.main.transform.position.y - grabbedObjectOne.transform.position.y));
-//								forceDirection = (touch + offset) - grabbedObjectOne.transform.position;
-//								Debug.DrawLine (grabbedObjectOne.transform.position, forceDirection, Color.red);
-//								grabbedObjectOne.GetComponent<Rigidbody> ().AddForce (forceDirection * GameManager.instance.parameters.forceMultiplier);
-//							}
-//							break;
-//
-//						case TouchPhase.Ended:
-//							foreach (GameObject L in GameManager.instance.config.configuration)
-//							{
-//								L.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-//								L.GetComponent<Rigidbody> ().angularVelocity = new Vector3 (0, 0, 0);
-//							}
-//							break;
-//						}
-//					} else
-//					{
-//						
-//					}
-//
-//				}
-//			}
